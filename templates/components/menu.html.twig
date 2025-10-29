@@ -37,10 +37,12 @@
 
       <div class="flex flex-col">
         {% for item in section.items %}
-          {% set isActive = (currentPath == item.href) %}
+          {# Determine active by comparing the start of the currentPath to the item's href so subpaths match too #}
+          {% set cp = currentPath|default('/') %}
+          {% set isActive = (cp|slice(0, item.href|length) == item.href) %}
 
-          <a href="{{ item.href }}"
-             class="group relative flex items-center h-10 rounded-lg text-body-lg font-medium text-gray-500 transition-colors hover:text-gray-900 {% if toggle %}justify-center w-10 before:hidden{% else %}px-3{% endif %} {% if isActive %}bg-gray-25 text-gray-900 before:opacity-100{% else %}before:opacity-0{% endif %} before:absolute before:top-2 before:-left-4 before:bottom-2 before:w-1 before:bg-primary-600 before:rounded-r-sm before:transition-opacity">
+       <a href="{{ item.href }}"
+         class="group relative flex items-center h-10 rounded-lg text-body-lg font-medium text-gray-500 transition-colors hover:text-gray-900 {% if toggle %}justify-center w-10 before:hidden{% else %}px-3{% endif %} {% if isActive %}bg-gray-25 text-primary-600 before:opacity-100{% else %}before:opacity-0{% endif %} before:absolute before:top-2 before:-left-4 before:bottom-2 before:w-1 before:bg-primary-600 before:rounded-r-sm before:transition-opacity">
 
             <!-- Icon -->
             <svg class="{% if toggle %}size-6{% else %}size-5{% endif %} {% if isActive %}fill-primary-500{% else %}fill-gray-500{% endif %} transition-colors group-hover:fill-gray-900" viewBox="0 0 20 20">

@@ -1340,3 +1340,53 @@ button:disabled {
 .left-18 {
   left: 4.5rem;
 }
+
+/* Responsive table: transform table into stacked cards on small screens */
+@media (max-width: 768px) {
+  /* Hide table header and turn rows into card-like blocks */
+  .responsive-table thead {
+    display: none;
+  }
+
+  .responsive-table,
+  .responsive-table tbody,
+  .responsive-table tr,
+  .responsive-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .responsive-table tr {
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 0.625rem;
+    background: var(--card);
+    padding: 0.75rem 1rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+
+  .responsive-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    border: none;
+  }
+
+  .responsive-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6b7280; /* text-gray-500 */
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* Make status badges align to the right nicely */
+  .responsive-table td .status {
+    margin-left: 0.5rem;
+  }
+
+  /* Tighten last row spacing */
+  .responsive-table tr:last-child {
+    margin-bottom: 0;
+  }
+}
