@@ -221,31 +221,27 @@
             </div>
 
             <!-- Table Content -->
-         <!-- Table Content -->
             <div class="px-5 py-2 max-lg:overflow-x-auto max-lg:scrollbar-none max-md:px-4">
-                <table class="responsive-table w-full text-body-md font-medium max-lg:min-w-268 table-fixed">
-                    <colgroup>
-                        <col style="width: 60px;">
-                        <col style="width: auto;">
-                        <col style="width: 100px;">
-                        <col style="width: 100px;">
-                        <col style="width: 80px;">
-                        <col style="width: 130px;">
-                        <col style="width: 110px;">
-                        <col style="width: 60px;">
-                    </colgroup>
-                    <thead class="max-md:hidden">
-                        <tr class="relative">
-                            <th class="pl-2.5 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border border-gray-100 rounded-l-[0.625rem]">No</th>
-                            <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Ticket Name</th>
-                            <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Price</th>
-                            <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Quantity</th>
-                            <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Sold</th>
-                            <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Sales Status</th>
-                            <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Visibility</th>
-                            <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border border-gray-100 rounded-r-[0.625rem]"></th>
+                <table class="w-full text-body-md font-medium [&_th,&_td]:pl-3 [&_th,&_td]:last:pr-3 [&_th]:relative [&_th]:z-2 [&_th]:font-medium [&_th]:text-left [&_th]:text-gray-500 max-lg:min-w-268">
+                    <thead>
+                        <tr class="relative [&_th]:py-2.25 after:absolute after:inset-0 after:border after:border-gray-100 after:bg-gray-25 after:rounded-[0.625rem] max-md:[&_th]:bg-gray-25 max-md:[&_th]:first:rounded-l-[0.625rem] max-md:[&_th]:last:rounded-r-[0.625rem] max-md:after:hidden">
+                            <th class="w-13 !pl-2.5 max-2xl:w-10">No</th>
+                            <th>Ticket Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Sold</th>
+                            <th>Sales Status</th>
+                            <th>Visibility</th>
+                            <th class="w-11"></th>
                         </tr>
                     </thead>
+                    <tbody id="ticketsTableBody">
+                        <tr>
+                            <td colspan="8" class="text-center py-12 text-gray-500">
+                                Loading tickets...
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
 
@@ -493,7 +489,7 @@
         /**
          * Create HTML for a ticket table row
          */
-    function createTicketRow(ticket, rowNumber) {
+        function createTicketRow(ticket, rowNumber) {
             const s = (ticket.salesStatus || '').toLowerCase().replace(/\s+/g, '_');
             const statusClass = s.includes('open') || s.includes('active')
                 ? 'status status-green'
@@ -507,18 +503,18 @@
 
             return `
                 <tr class="relative [&_td]:py-3 after:absolute after:inset-0 after:border-b after:border-gray-100">
-                    <td data-label="No" class="!pl-2.5 text-gray-900">${rowNumber}</td>
-                    <td data-label="Ticket Name" class="text-gray-900">${escapeHtml(ticket.ticketName)}</td>
-                    <td data-label="Price" class="text-gray-900">$${parseFloat(ticket.price).toFixed(2)}</td>
-                    <td data-label="Quantity" class="text-gray-900">${ticket.quantity}</td>
-                    <td data-label="Sold" class="text-gray-900">${ticket.sold}</td>
-                    <td data-label="Sales Status">
+                    <td class="!pl-2.5 text-gray-900">${rowNumber}</td>
+                    <td class="text-gray-900">${escapeHtml(ticket.ticketName)}</td>
+                    <td class="text-gray-900">$${parseFloat(ticket.price).toFixed(2)}</td>
+                    <td class="text-gray-900">${ticket.quantity}</td>
+                    <td class="text-gray-900">${ticket.sold}</td>
+                    <td>
                         <div class="${statusClass}">${escapeHtml(ticket.salesStatus)}</div>
                     </td>
-                    <td data-label="Visibility">
+                    <td>
                         <div class="${visibilityClass}">${escapeHtml(ticket.visibility)}</div>
                     </td>
-                    <td data-label="Actions" class="w-11">
+                    <td class="w-11">
                         <div class="relative">
                             <button
                                 onclick="toggleActions('${ticket.id}')"
