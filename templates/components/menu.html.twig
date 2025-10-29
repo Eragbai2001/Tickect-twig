@@ -20,7 +20,7 @@
       {
         title: "Tickets",
         icon: "ticket",
-        href: "/ticket"
+        href: "/tickets"
       }
     ]
   }
@@ -37,9 +37,9 @@
 
       <div class="flex flex-col">
         {% for item in section.items %}
-          {# Determine active by comparing the start of the currentPath to the item's href so subpaths match too #}
+          {# Determine active by checking if the item's href appears in the current path (works for full URLs and subpaths) #}
           {% set cp = currentPath|default('/') %}
-          {% set isActive = (cp|slice(0, item.href|length) == item.href) %}
+          {% set isActive = (item.href in cp) %}
 
        <a href="{{ item.href }}"
          class="group relative flex items-center h-10 rounded-lg text-body-lg font-medium text-gray-500 transition-colors hover:text-gray-900 {% if toggle %}justify-center w-10 before:hidden{% else %}px-3{% endif %} {% if isActive %}bg-gray-25 text-primary-600 before:opacity-100{% else %}before:opacity-0{% endif %} before:absolute before:top-2 before:-left-4 before:bottom-2 before:w-1 before:bg-primary-600 before:rounded-r-sm before:transition-opacity">
