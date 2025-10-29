@@ -1288,3 +1288,22 @@ button:disabled {
     justify-content: center;
   }
 }
+
+/* Utilities for XL breakpoint (max width: 1279px) used by templates */
+@media (max-width: 1279px) {
+  .max-xl\:left-0 { left: 0 !important; }
+  .max-xl\:pl-0 { padding-left: 0 !important; }
+  .max-xl\:translate-x-0 { transform: translateX(0) !important; }
+  .max-xl\:-translate-x-full { transform: translateX(-100%) !important; }
+  .max-xl\:hidden { display: none !important; }
+  .max-xl\:z-30 { z-index: 30 !important; }
+  .max-xl\:transition-transform { transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1); }
+}
+
+/* Specific layout utilities used in templates (sidebar/header widths and paddings) */
+.w-69 { width: 17.25rem; }
+.w-18 { width: 4.5rem; }
+.pl-69 { padding-left: 17.25rem; }
+.left-69 { left: 17.25rem; }
+.left-18 { left: 4.5rem; }
+
