@@ -1,0 +1,381 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block title %}Tickety - Ticket Management Dashboard{% endblock %}
+
+{% block content %}
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between py-4">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <img src="/images/logo.png" alt="Tickety" class="h-10 w-auto">
+                    <span class="text-xl font-bold text-gray-900">Tickety</span>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden items-center gap-8 lg:flex">
+                    <a href="#platform" class="text-sm font-medium text-gray-700 hover:text-purple-600">Platform</a>
+                    <a href="#solutions" class="text-sm font-medium text-gray-700 hover:text-purple-600">Solutions</a>
+                    <a href="#plans" class="text-sm font-medium text-gray-700 hover:text-purple-600">Plans</a>
+                    <a href="#resources" class="text-sm font-medium text-gray-700 hover:text-purple-600">Resources</a>
+                    <a href="#company" class="text-sm font-medium text-gray-700 hover:text-purple-600">Company</a>
+                </div>
+
+                <!-- Desktop Actions -->
+                <div class="hidden items-center gap-4 lg:flex">
+                    <a href="/sign-in" class="text-sm font-medium text-gray-700 hover:text-purple-600">Sign up</a>
+                    <a href="/sign-in" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">Try for free</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative pt-20 pb-20 lg:pt-0 lg:pb-0 min-h-[600px] lg:min-h-screen overflow-hidden">
+        <!-- SVG Gradient Background -->
+        <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 600" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="heroGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#6425D3;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#A259FF;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <rect width="1440" height="600" fill="url(#heroGradient)"/>
+            <!-- Waves -->
+            <path d="M0,300 C240,360 360,240 720,300 C1080,360 1320,220 1440,260 L1440,600 L0,600 Z" fill="rgba(255,255,255,0.08)"/>
+            <path d="M0,320 C260,380 420,260 720,320 C1020,380 1180,240 1440,300 L1440,600 L0,600 Z" fill="rgba(255,255,255,0.06)"/>
+        </svg>
+
+        <!-- Decorative Circles -->
+        <div class="absolute right-0 bottom-0 w-80 h-80 pointer-events-none">
+            <!-- Large white circle -->
+            <div class="absolute w-56 h-56 bg-white/[0.98] rounded-full" style="right: 2rem; bottom: -2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.08); transform: translateY(20px);"></div>
+            <!-- Medium purple circle -->
+            <div class="absolute w-32 h-32 bg-purple-200/65 rounded-full" style="right: 0; bottom: 8rem; box-shadow: 0 14px 30px rgba(0,0,0,0.05);"></div>
+            <!-- Small purple circle -->
+            <div class="absolute w-16 h-16 bg-purple-200/45 rounded-full" style="right: 8rem; bottom: 14rem;"></div>
+        </div>
+
+        <!-- Content Container -->
+        <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between gap-8 lg:gap-12" style="min-height: 500px; align-items: center;">
+                <!-- Left Column - Content -->
+                <div class="flex flex-col justify-center flex-1 pt-20 lg:pt-0">
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white mb-6">
+                        TicketFlow — Support Ticket
+                    </h1>
+
+                    <p class="text-lg sm:text-xl leading-relaxed text-white/90 mb-8 max-w-xl">
+                        Manage tickets easily and respond faster. Streamline support, boost efficiency, and keep every request organized.
+                    </p>
+
+                    <!-- Email Form -->
+                    <form class="flex flex-col sm:flex-row gap-4 mb-8 max-w-md">
+                        <div class="relative flex-1">
+                            <input
+                                type="email"
+                                placeholder="your email"
+                                class="w-full h-12 rounded-lg border-0 bg-white px-4 text-gray-900 shadow-lg placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                                required
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            class="h-12 bg-gray-900 px-8 text-white font-semibold rounded-2xl hover:bg-gray-800 transition-colors whitespace-nowrap">
+                            Get Started
+                        </button>
+                    </form>
+
+                    <!-- Login Link -->
+                    <a href="/sign-in" class="text-white hover:text-white/80 transition-colors font-medium mb-12">
+                        Already have an account? Log in
+                    </a>
+
+                    <!-- Feature Boxes -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl">
+                        <div class="bg-white/95 rounded-xl p-5 shadow-lg backdrop-blur-sm">
+                            <h4 class="text-sm font-semibold text-gray-900 mb-2">Fast Setup</h4>
+                            <p class="text-xs text-gray-600 leading-relaxed">Get started in minutes with prebuilt templates.</p>
+                        </div>
+                        <div class="bg-white/95 rounded-xl p-5 shadow-lg backdrop-blur-sm">
+                            <h4 class="text-sm font-semibold text-gray-900 mb-2">Collaboration</h4>
+                            <p class="text-xs text-gray-600 leading-relaxed">Assign and track tickets across teams.</p>
+                        </div>
+                        <div class="bg-white/95 rounded-xl p-5 shadow-lg backdrop-blur-sm">
+                            <h4 class="text-sm font-semibold text-gray-900 mb-2">Reporting</h4>
+                            <p class="text-xs text-gray-600 leading-relaxed">Insights to improve response times.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Illustration -->
+                <div class="hidden lg:flex flex-1 items-end justify-end h-screen relative">
+                    <img
+                        src="/images/Rectangle 305.png"
+                        alt="Customer support representative illustration showing live chat and ticket handling"
+                        class="w-full max-w-lg h-auto object-contain relative z-20"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trusted Companies Section -->
+    <section class="bg-white py-12 sm:py-16">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-balance text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl mt-10">
+                    Trusted Companies From Around <span class="block">the World</span>
+                </h2>
+                <p class="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-gray-600">
+                    Thousands of teams rely on Tickety to manage customer requests efficiently. From startups to global enterprises, our platform powers fast, reliable support every day.
+                </p>
+            </div>
+
+            <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 items-center justify-items-center">
+                <div class="w-24 flex items-center justify-center">
+                    <img src="/provider-logos/uber.png" alt="Uber logo" class="h-6 w-auto object-contain">
+                </div>
+                <div class="w-24 flex items-center justify-center">
+                    <img src="/google-logo.png" alt="Google logo" class="h-6 w-auto object-contain">
+                </div>
+                <div class="w-24 flex items-center justify-center">
+                    <img src="/paypal-logo.png" alt="PayPal logo" class="h-6 w-auto object-contain">
+                </div>
+                <div class="w-24 flex items-center justify-center">
+                    <img src="/microsoft-logo.png" alt="Microsoft logo" class="h-6 w-auto object-contain">
+                </div>
+                <div class="w-24 flex items-center justify-center">
+                    <img src="/dribbble-logo.jpg" alt="Dribbble logo" class="h-6 w-auto object-contain">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- We Offer Section -->
+    <section class="bg-gray-50 py-16 sm:py-24 mt-10">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-balance text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
+                    We Offer
+                </h2>
+                <p class="mx-auto mt-6 max-w-3xl text-pretty text-lg leading-relaxed text-gray-600">
+                    Simplify your workflow with tools built for modern support teams.
+                </p>
+            </div>
+
+            <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                <!-- Consultancy -->
+                <div class="flex flex-col items-center text-center">
+                    <div class="flex h-24 w-24 items-center justify-center rounded-full bg-purple-100">
+                        <svg class="h-12 w-12 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="mt-6 text-xl font-bold text-gray-900">Consultancy</h3>
+                    <p class="mt-4 text-pretty leading-relaxed text-gray-600">Get expert guidance tailored to your business needs — from process setup to customer engagement strategy.</p>
+                </div>
+
+                <!-- Partnership Deals -->
+                <div class="flex flex-col items-center text-center">
+                    <div class="flex h-24 w-24 items-center justify-center rounded-full bg-pink-100">
+                        <svg class="h-12 w-12 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4m0 2a2 2 0 100-4m0 4a2 2 0 110-4m-6 0V4m0 2a2 2 0 100-4m0 4a2 2 0 110-4m-6 0V4m0 2a2 2 0 100-4m0 4a2 2 0 110-4"/>
+                        </svg>
+                    </div>
+                    <h3 class="mt-6 text-xl font-bold text-gray-900">Partnership Deals</h3>
+                    <p class="mt-4 text-pretty leading-relaxed text-gray-600">Collaborate with trusted partners to expand your reach, improve support delivery, and drive mutual growth.</p>
+                </div>
+
+                <!-- Client Relations -->
+                <div class="flex flex-col items-center text-center">
+                    <div class="flex h-24 w-24 items-center justify-center rounded-full bg-yellow-100">
+                        <svg class="h-12 w-12 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="mt-6 text-xl font-bold text-gray-900">Client Relations</h3>
+                    <p class="mt-4 text-pretty leading-relaxed text-gray-600">Build long-term customer trust through quick responses, transparent communication, and dedicated service.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section 1 -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center gap-12 mb-32">
+                <div class="flex-1 max-w-md">
+                    <h2 class="font-bold text-4xl text-gray-900 mb-4">
+                        Great customer relationship starts here
+                    </h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Build trust with fast responses and organized ticket management. Keep your customers happy with seamless support.
+                    </p>
+                    <a href="/sign-in" class="inline-flex items-center justify-center h-10 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors">
+                        Get Started
+                    </a>
+                </div>
+                <div class="flex-1 flex justify-center">
+                    <img src="/images/man-business.png" alt="Professional man with coffee representing customer support" class="w-full max-w-md">
+                </div>
+            </div>
+
+            <!-- Features Section 2 -->
+            <div class="flex flex-col lg:flex-row-reverse items-center gap-12">
+                <div class="flex-1 max-w-md">
+                    <h2 class="font-bold text-4xl text-gray-900 mb-4">
+                        The biggest business for your clients
+                    </h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Deliver professional support that scales with your business. Track, prioritize, and resolve tickets efficiently.
+                    </p>
+                    <a href="/sign-in" class="inline-flex items-center justify-center h-10 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors">
+                        Get Started
+                    </a>
+                </div>
+                <div class="flex-1 flex justify-center">
+                    <img src="/images/woman-business.png" alt="Professional woman representing business growth" class="w-full max-w-md">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 px-4 bg-gray-50">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12">
+                What our happy clients say
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-6 rounded-lg border border-gray-100">
+                    <div class="flex flex-col items-center text-center">
+                        <img src="/images/avatars/avatar-1.png" alt="Amari cantu" class="w-16 h-16 rounded-full object-cover mb-4">
+                        <h3 class="font-semibold text-base mb-1">Amari cantu</h3>
+                        <p class="text-sm text-gray-500 mb-4">@AmariCantu</p>
+                        <p class="text-sm text-gray-700 leading-relaxed">Sit ut diam bibendum dolor. Ullamcorper ph eget . Mauris dolor vestibulum et lacus a ante orci.</p>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-6 rounded-lg border border-gray-100">
+                    <div class="flex flex-col items-center text-center">
+                        <img src="/images/avatars/avatar-4.png" alt="Nathanael burgess" class="w-16 h-16 rounded-full object-cover mb-4">
+                        <h3 class="font-semibold text-base mb-1">Nathanael burgess</h3>
+                        <p class="text-sm text-gray-500 mb-4">@NathanaelBurgess</p>
+                        <p class="text-sm text-gray-700 leading-relaxed">Business should be nominated for service of the year. No matter where you go, Business is the coolest, most happening thing around</p>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-6 rounded-lg border border-gray-100">
+                    <div class="flex flex-col items-center text-center">
+                        <img src="/images/avatars/avatar-2.png" alt="Emory Hendricksoy" class="w-16 h-16 rounded-full object-cover mb-4">
+                        <h3 class="font-semibold text-base mb-1">Emory Hendricksoy</h3>
+                        <p class="text-sm text-gray-500 mb-4">@EmoryHendricks</p>
+                        <p class="text-sm text-gray-700 leading-relaxed">I would gladly pay over 600 dollars for Business. I'd be lost without Business. Business has got everything I need.</p>
+                    </div>
+                </div>
+
+                <!-- Testimonial 4 -->
+                <div class="bg-white p-6 rounded-lg border border-gray-100">
+                    <div class="flex flex-col items-center text-center">
+                        <img src="/images/avatars/avatar-3.png" alt="Lucia Koch" class="w-16 h-16 rounded-full object-cover mb-4">
+                        <h3 class="font-semibold text-base mb-1">Lucia Koch</h3>
+                        <p class="text-sm text-gray-500 mb-4">@LuciaKoch</p>
+                        <p class="text-sm text-gray-700 leading-relaxed">Definitely worth the investment. I couldn't have asked for more than this. Thank you so much for your help.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="rounded-3xl px-8 py-16 text-center" style="background: linear-gradient(135deg, #6425D3 5%, #A259FF 100%);">
+                <h2 class="font-bold text-4xl text-white mb-4">
+                    Join our Newsletter
+                </h2>
+                <p class="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
+                    Enter your Email address to get started for free with our newsletter.
+                </p>
+                <form class="flex flex-col sm:flex-row gap-3 max-w-[320px] mx-auto items-center justify-center" onsubmit="return false;">
+                    <div class="relative flex-1 w-full max-w-[320px]">
+                        <input
+                            type="email"
+                            placeholder="Your e-mail address"
+                            class="w-full bg-white border-0 h-12 px-6 pr-34 rounded-xl text-gray-900 outline-0 focus:ring-2 focus:ring-purple-400"
+                            required
+                        />
+                        <button
+                            type="submit"
+                            class="absolute right-1 top-1/2 -translate-y-1/2 bg-purple-600 text-white border-0 h-10 px-4 rounded-xl hover:bg-purple-700 shadow-md transition-colors font-medium">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 border-t border-gray-200">
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+                <!-- Logo and Description -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <img src="/images/logo.png" alt="Tickety" class="w-10 h-10">
+                        <span class="text-xl font-bold text-gray-900">Tickety</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-6">
+                        Streamline support, boost efficiency, and keep every request organized.
+                    </p>
+                </div>
+
+                <!-- Company Links -->
+                <div>
+                    <h3 class="font-semibold text-gray-900 mb-4">Company</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="text-gray-600 hover:text-purple-600">About us</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-purple-600">Team</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-purple-600">Careers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Product Links -->
+                <div>
+                    <h3 class="font-semibold text-gray-900 mb-4">Product</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="text-gray-600 hover:text-purple-600">Platform</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-purple-600">Pricing</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-purple-600">Solutions</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources Links -->
+                <div>
+                    <h3 class="font-semibold text-gray-900 mb-4">Resources</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="text-gray-600 hover:text-purple-600">Blog</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-purple-600">Use Cases</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-purple-600">Testimonials</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-200">
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-600">
+                    <a href="#" class="hover:text-purple-600">Terms & Conditions</a>
+                    <a href="#" class="hover:text-purple-600">Privacy Policy</a>
+                    <a href="#" class="hover:text-purple-600">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock %}

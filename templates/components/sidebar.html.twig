@@ -1,0 +1,353 @@
+{#
+  Sidebar Component - Main navigation sidebar
+
+  Usage in layouts:
+  {% set sidebarState = { toggle: false, visible: false } %}
+  {% include 'components/sidebar.html.twig' with {
+    toggle: sidebarState.toggle,
+    visible: sidebarState.visible,
+    currentPath: request.getUri()
+  } %}
+#}
+
+{% set toggle = toggle|default(false) %}
+{% set visible = visible|default(false) %}
+
+<div data-sidebar class="fixed top-0 left-0 bottom-0 z-10 flex flex-col bg-white border-r border-gray-100 max-xl:z-30 max-xl:transition-transform max-md:w-full
+  {% if toggle %}w-18{% else %}w-69{% endif %}
+  {% if visible %}max-xl:translate-x-0{% else %}max-xl:-translate-x-full{% endif %}">
+
+  <!-- Logo Section -->
+  <div class="flex items-center gap-2 border-b border-gray-100 {% if toggle %}flex-col px-5 py-3{% else %}justify-between p-5 max-md:py-4{% endif %}">
+    <a href="/" class="flex items-center">
+      <img src="/images/logo.png" alt="Tickety" class="w-8 opacity-100" />
+      {% if not toggle %}
+        <div class="ml-2.5 text-h5">Tickety</div>
+      {% endif %}
+    </a>
+
+    <!-- Toggle Button -->
+    <button data-toggle-btn class="transition-colors max-xl:hidden {% if toggle %}rotate-180{% endif %} size-8 inline-flex items-center justify-center rounded-lg border border-gray-100 hover:bg-gray-25"
+            onclick="toggleSidebar()">
+      <svg class="size-5 fill-gray-500" viewBox="0 0 20 20">
+        <path d="M7.5 15l5-5-5-5"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Content Section -->
+  <div class="flex flex-col p-4 pt-5 grow overflow-y-auto scrollbar-none">
+    <!-- Search (shown when not toggled) -->
+    {% if not toggle %}
+      <div class="flex items-center gap-2 shrink-0 h-10 px-3 mb-4 border border-gray-100 rounded-lg shadow-xs text-body-sm transition-colors cursor-pointer hover:border-primary-500 max-xl:hidden">
+        <svg class="fill-gray-400" viewBox="0 0 20 20" width="20" height="20">
+          <path d="M9.167 15.833c-3.682 0-6.667-2.985-6.667-6.666 0-3.682 2.985-6.667 6.667-6.667 3.681 0 6.666 2.985 6.666 6.667 0 3.681-2.985 6.666-6.666 6.666zm0-11.666c-2.76 0-5 2.24-5 5 0 2.76 2.24 5 5 5 2.76 0 5-2.24 5-5 0-2.76-2.24-5-5-5zm7.386 12.886l-2.357-2.357 1.178-1.179 2.357 2.357-1.178 1.179z"/>
+        </svg>
+        <div class="text-gray-500">Search</div>
+        <div class="flex gap-1 ml-auto">
+          <div class="flex justify-center items-center size-5 rounded-sm bg-gray-50">
+            <img class="w-3 opacity-100" src="/images/key-command.svg" alt="">
+          </div>
+          <div class="flex justify-center items-center size-5 rounded-sm bg-gray-50 text-[0.8125rem] font-semibold text-gray-400">
+            K
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Menu Component -->
+    {% include 'components/menu.html.twig' with {
+      toggle: toggle,
+      currentPath: currentPath|default('/')
+    } %}
+
+    <!-- Bottom Actions -->
+    {% if toggle %}
+      <div class="flex flex-col gap-2">
+        <!-- Help Icon -->
+        <a href="#" class="group flex items-center justify-center w-10 h-10 rounded-lg">
+          <svg class="size-6 fill-gray-500 transition-colors group-hover:fill-gray-900" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+        </a>
+
+        <!-- Logout Button -->
+        <button onclick="openLogoutModal()"
+                class="group flex items-center justify-center w-10 h-10 rounded-lg cursor-pointer hover:bg-error-50 transition-colors">
+          <svg class="size-6 fill-error-100 transition-colors group-hover:fill-error-200" viewBox="0 0 24 24">
+            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5z"/>
+            <path d="M4 5h7V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h7v-2H4V5z"/>
+          </svg>
+        </button>
+      </div>
+    {% else %}
+      <!-- Help & Center Section -->
+      <div class="relative mt-12 p-4 pt-11 rounded-xl bg-primary-500 text-center text-white">
+        <div class="absolute left-1/2 -top-6 flex justify-center items-center w-12 h-12 -translate-x-1/2 rounded-full bg-primary-500 border-[0.25rem] border-white">
+          <svg class="size-6 fill-white" viewBox="0 0 20 20">
+            <path d="M10 1.5a6.8 6.8 0 0 1 6.8 6.8v.144l.01.004a2.55 2.55 0 0 1 1.686 2.252l.004.15v1.7a2.55 2.55 0 0 1-2.55 2.55h-.113c-.371 1.341-1.612 2.218-3.169 2.473l-.174.025-.033.096c-.173.436-.578.754-1.063.8l-.123.006H10a1.7 1.7 0 1 1 0-3.4h1.275c.497 0 .928.284 1.138.699l.038.085.089-.015c.674-.137 1.194-.443 1.475-.859l.044-.07-.061-.034c-.327-.205-.554-.554-.593-.958l-.006-.123v-4.25c0-.704.571-1.275 1.275-1.275h.425a5.1 5.1 0 1 0-10.2 0h.425c.663 0 1.207.506 1.269 1.152l.006.123v4.25c0 .704-.571 1.275-1.275 1.275H4.05a2.55 2.55 0 0 1-2.55-2.55v-1.7a2.55 2.55 0 0 1 1.69-2.401l.01-.004V8.3a6.8 6.8 0 0 1 6.588-6.797L10 1.5zm5.95 11.9a.85.85 0 0 0 .85-.85v-1.7a.85.85 0 0 0-.85-.85h-.85v3.4h.85zm-11.05 0V10h-.85a.85.85 0 0 0-.844.751l-.006.099v1.7a.85.85 0 0 0 .85.85h.85z"/>
+          </svg>
+        </div>
+        <div class="mb-1 text-h6">Help & Center</div>
+        <div class="-mx-1 mb-4 text-body-sm">
+          Having difficulty in Ticketing.<br>Please contact us for further inquiries
+        </div>
+        <a href="/" class="inline-flex items-center justify-center w-full h-11 px-3.75 bg-white text-primary-500 rounded-xl text-body-md font-semibold hover:bg-gray-25 transition-colors">
+          Got to help center
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  // Initialize sidebar state from localStorage or default to false (expanded)
+  let sidebarToggled = localStorage.getItem('sidebarToggled') === 'true';
+
+  function toggleSidebar() {
+    sidebarToggled = !sidebarToggled;
+    localStorage.setItem('sidebarToggled', sidebarToggled);
+
+    const sidebar = document.querySelector('[data-sidebar]');
+    const toggleBtn = document.querySelector('[data-toggle-btn]');
+    const header = document.querySelector('[data-header]');
+    const mainContent = document.querySelector('[data-main-content]');
+
+    // 69 * 4px = 276px, 18 * 4px = 72px
+    const expandedWidth = '17.25rem'; // 69 * 0.25rem
+    const collapsedWidth = '4.5rem';  // 18 * 0.25rem
+
+    // Toggle sidebar width
+    if (sidebarToggled) {
+      sidebar.style.width = collapsedWidth;
+    } else {
+      sidebar.style.width = expandedWidth;
+    }
+
+    // Toggle button rotation
+    if (sidebarToggled) {
+      toggleBtn.classList.add('rotate-180');
+    } else {
+      toggleBtn.classList.remove('rotate-180');
+    }
+
+    // Update header left position
+    if (header) {
+      if (sidebarToggled) {
+        header.style.left = collapsedWidth;
+      } else {
+        header.style.left = expandedWidth;
+      }
+    }
+
+    // Update main content padding
+    if (mainContent) {
+      if (sidebarToggled) {
+        mainContent.style.paddingLeft = collapsedWidth;
+      } else {
+        mainContent.style.paddingLeft = expandedWidth;
+      }
+    }
+
+    // Toggle logo section layout
+    const logoSection = sidebar.querySelector('.border-b');
+    if (sidebarToggled) {
+      logoSection.classList.add('flex-col', 'px-5', 'py-3');
+      logoSection.classList.remove('justify-between', 'p-5');
+    } else {
+      logoSection.classList.remove('flex-col', 'px-5', 'py-3');
+      logoSection.classList.add('justify-between', 'p-5');
+    }
+
+    // Toggle logo text visibility
+    const logoText = sidebar.querySelector('.text-h5');
+    if (logoText) {
+      logoText.style.display = sidebarToggled ? 'none' : 'block';
+    }
+
+    // Toggle search visibility
+    const searchBar = sidebar.querySelector('.flex.items-center.gap-2.shrink-0');
+    if (searchBar) {
+      searchBar.style.display = sidebarToggled ? 'none' : 'flex';
+    }
+
+    // Toggle menu section titles
+    const menuTitles = sidebar.querySelectorAll('.text-gray-300');
+    menuTitles.forEach(title => {
+      title.style.display = sidebarToggled ? 'none' : 'flex';
+    });
+
+    // Toggle menu items layout
+    const menuItems = sidebar.querySelectorAll('.group.relative.flex.items-center');
+    menuItems.forEach(item => {
+      if (sidebarToggled) {
+        item.classList.add('justify-center', 'w-10');
+        item.classList.remove('px-3');
+      } else {
+        item.classList.remove('justify-center', 'w-10');
+        item.classList.add('px-3');
+      }
+
+      // Toggle menu text
+      const menuText = item.querySelector('span');
+      if (menuText) {
+        menuText.style.display = sidebarToggled ? 'none' : 'inline';
+      }
+
+      // Toggle icon size
+      const icon = item.querySelector('img');
+      if (icon) {
+        if (sidebarToggled) {
+          icon.classList.remove('size-5');
+          icon.classList.add('size-6');
+        } else {
+          icon.classList.remove('size-6');
+          icon.classList.add('size-5');
+        }
+      }
+
+      // Hide before indicator
+      if (sidebarToggled) {
+        item.classList.add('before:hidden');
+      } else {
+        item.classList.remove('before:hidden');
+      }
+    });
+
+    // Toggle bottom section
+    const helpSection = sidebar.querySelector('.relative.mt-12');
+    const bottomActions = sidebar.querySelector('.flex.flex-col.gap-2');
+
+    if (sidebarToggled) {
+      if (helpSection) helpSection.style.display = 'none';
+      if (bottomActions) bottomActions.style.display = 'flex';
+    } else {
+      if (helpSection) helpSection.style.display = 'block';
+      if (bottomActions) bottomActions.style.display = 'none';
+    }
+
+    // Toggle menu container gap
+    const menuContainer = sidebar.querySelector('.flex.flex-col.mb-auto');
+    if (menuContainer) {
+      if (sidebarToggled) {
+        menuContainer.classList.remove('gap-4');
+        menuContainer.classList.add('gap-6');
+      } else {
+        menuContainer.classList.remove('gap-6');
+        menuContainer.classList.add('gap-4');
+      }
+    }
+  }
+
+  // Apply initial state on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    // Apply the saved state without toggling
+    const sidebar = document.querySelector('[data-sidebar]');
+    const toggleBtn = document.querySelector('[data-toggle-btn]');
+    const header = document.querySelector('[data-header]');
+    const mainContent = document.querySelector('[data-main-content]');
+
+    const expandedWidth = '17.25rem';
+    const collapsedWidth = '4.5rem';
+
+    if (sidebarToggled) {
+      // Apply collapsed state
+      sidebar.style.width = collapsedWidth;
+      toggleBtn.classList.add('rotate-180');
+      if (header) header.style.left = collapsedWidth;
+      if (mainContent) mainContent.style.paddingLeft = collapsedWidth;
+
+      // Apply all other collapsed styles
+      const logoSection = sidebar.querySelector('.border-b');
+      if (logoSection) {
+        logoSection.classList.add('flex-col', 'px-5', 'py-3');
+        logoSection.classList.remove('justify-between', 'p-5');
+      }
+
+      const logoText = sidebar.querySelector('.text-h5');
+      if (logoText) logoText.style.display = 'none';
+
+      const searchBar = sidebar.querySelector('.flex.items-center.gap-2.shrink-0');
+      if (searchBar) searchBar.style.display = 'none';
+
+      const menuTitles = sidebar.querySelectorAll('.text-gray-300');
+      menuTitles.forEach(title => title.style.display = 'none');
+
+      const menuItems = sidebar.querySelectorAll('.group.relative.flex.items-center');
+      menuItems.forEach(item => {
+        item.classList.add('justify-center', 'w-10', 'before:hidden');
+        item.classList.remove('px-3');
+        const menuText = item.querySelector('span');
+        if (menuText) menuText.style.display = 'none';
+        const icon = item.querySelector('img, svg');
+        if (icon) {
+          icon.classList.remove('size-5');
+          icon.classList.add('size-6');
+        }
+      });
+
+      const helpSection = sidebar.querySelector('.relative.mt-12');
+      const bottomActions = sidebar.querySelector('.flex.flex-col.gap-2');
+      if (helpSection) helpSection.style.display = 'none';
+      if (bottomActions) bottomActions.style.display = 'flex';
+
+      const menuContainer = sidebar.querySelector('.flex.flex-col.mb-auto');
+      if (menuContainer) {
+        menuContainer.classList.remove('gap-4');
+        menuContainer.classList.add('gap-6');
+      }
+    } else {
+      // Apply expanded state explicitly
+      sidebar.style.width = expandedWidth;
+      toggleBtn.classList.remove('rotate-180');
+      if (header) header.style.left = expandedWidth;
+      if (mainContent) mainContent.style.paddingLeft = expandedWidth;
+
+      // Ensure expanded styles are applied
+      const logoSection = sidebar.querySelector('.border-b');
+      if (logoSection) {
+        logoSection.classList.remove('flex-col', 'px-5', 'py-3');
+        logoSection.classList.add('justify-between', 'p-5');
+      }
+
+      const logoText = sidebar.querySelector('.text-h5');
+      if (logoText) logoText.style.display = 'block';
+
+      const searchBar = sidebar.querySelector('.flex.items-center.gap-2.shrink-0');
+      if (searchBar) searchBar.style.display = 'flex';
+
+      const menuTitles = sidebar.querySelectorAll('.text-gray-300');
+      menuTitles.forEach(title => title.style.display = 'flex');
+
+      const menuItems = sidebar.querySelectorAll('.group.relative.flex.items-center');
+      menuItems.forEach(item => {
+        item.classList.remove('justify-center', 'w-10', 'before:hidden');
+        item.classList.add('px-3');
+        const menuText = item.querySelector('span');
+        if (menuText) menuText.style.display = 'inline';
+        const icon = item.querySelector('img, svg');
+        if (icon) {
+          icon.classList.remove('size-6');
+          icon.classList.add('size-5');
+        }
+      });
+
+      const helpSection = sidebar.querySelector('.relative.mt-12');
+      const bottomActions = sidebar.querySelector('.flex.flex-col.gap-2');
+      if (helpSection) helpSection.style.display = 'block';
+      if (bottomActions) bottomActions.style.display = 'none';
+
+      const menuContainer = sidebar.querySelector('.flex.flex-col.mb-auto');
+      if (menuContainer) {
+        menuContainer.classList.remove('gap-6');
+        menuContainer.classList.add('gap-4');
+      }
+    }
+  });
+
+  function openLogoutModal() {
+    if (confirm('Are you sure you want to logout?')) {
+      window.location.href = '/api/auth/logout';
+    }
+  }
+</script>

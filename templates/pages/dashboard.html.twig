@@ -1,0 +1,112 @@
+{% extends "layouts/dashboard.html.twig" %}
+
+{% block title %}Dashboard - Tickety{% endblock %}
+
+{% block dashboard_content %}
+    <script src="/js/auth.js"></script>
+    <script>
+        // Protect this route - redirect if not authenticated
+        if (!AuthManager.isAuthenticated()) {
+            window.location.href = '/sign-in';
+        }
+    </script>
+
+    <!-- Page Title & Actions -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-h4">Dashboard</h2>
+            <div class="text-gray-500 text-body-md">
+                Overview summary
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <a href="/tickets" class="inline-flex items-center justify-center gap-2 h-13 px-3.75 border border-gray-100 shadow-xs rounded-xl text-body-lg font-semibold text-gray-900 fill-gray-400 hover:bg-gray-25 hover:fill-gray-900 transition-all cursor-pointer max-md:h-12">
+                Manage Tickets
+            </a>
+            <button onclick="logout()" class="inline-flex items-center justify-center gap-2 h-13 px-3.75 bg-error-100 border border-transparent text-white fill-white rounded-xl text-body-lg font-semibold hover:bg-error-200 transition-all cursor-pointer max-md:h-12">
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="flex gap-6 mt-6 max-md:flex-col max-md:gap-4">
+        <!-- Open Tickets Card -->
+        <div class="flex-1 p-4 rounded-2xl border border-green-200 bg-green-50">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-center items-center size-10 border border-gray-100 rounded-[0.625rem] bg-white">
+                    <img src="/images/icons/ticket.svg" alt="" class="w-5 opacity-100">
+                </div>
+            </div>
+
+            <div class="mb-1 text-gray-500">Open Tickets</div>
+
+            <div class="flex justify-between items-center">
+                <div class="text-body-xl font-semibold text-green-600">
+                    42
+                </div>
+                <div class="inline-flex items-center gap-0.5 h-5 border rounded-sm border-success-100 bg-success-0 text-success-100 pl-0.75 pr-1.25 text-body-sm font-medium">
+                    <svg class="!size-3.5 fill-success-100" viewBox="0 0 20 20">
+                        <path d="M10 2c.221 0 .429.054.611.148l.01.006.021.01.061.039.04.023.014.012.03.019.034.029.043.033.041.041.014.011 5.2 5.053a1.24 1.24 0 0 1 0 1.786 1.33 1.33 0 0 1-1.838 0L11.3 6.312v10.425c0 .644-.496 1.175-1.137 1.253L10 18c-.718 0-1.3-.566-1.3-1.263V6.311L5.719 9.209a1.33 1.33 0 0 1-1.705.113l-.133-.113a1.24 1.24 0 0 1 0-1.786l5.2-5.053.013-.011.043-.041.042-.033.035-.029.028-.019.015-.012.038-.023.062-.039.02-.01c.148-.077.299-.125.459-.145L10 2z"/>
+                    </svg>
+                    8%
+                </div>
+            </div>
+        </div>
+
+        <!-- In Progress Card -->
+        <div class="flex-1 p-4 rounded-2xl border border-amber-200 bg-amber-50">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-center items-center size-10 border border-gray-100 rounded-[0.625rem] bg-white">
+                    <img src="/images/icons/loader.svg" alt="" class="w-5 opacity-100">
+                </div>
+            </div>
+
+            <div class="mb-1 text-gray-500">In Progress</div>
+
+            <div class="flex justify-between items-center">
+                <div class="text-body-xl font-semibold text-amber-600">
+                    16
+                </div>
+                <div class="inline-flex items-center gap-0.5 h-5 border rounded-sm border-success-100 bg-success-0 text-success-100 pl-0.75 pr-1.25 text-body-sm font-medium">
+                    <svg class="!size-3.5 fill-success-100" viewBox="0 0 20 20">
+                        <path d="M10 2c.221 0 .429.054.611.148l.01.006.021.01.061.039.04.023.014.012.03.019.034.029.043.033.041.041.014.011 5.2 5.053a1.24 1.24 0 0 1 0 1.786 1.33 1.33 0 0 1-1.838 0L11.3 6.312v10.425c0 .644-.496 1.175-1.137 1.253L10 18c-.718 0-1.3-.566-1.3-1.263V6.311L5.719 9.209a1.33 1.33 0 0 1-1.705.113l-.133-.113a1.24 1.24 0 0 1 0-1.786l5.2-5.053.013-.011.043-.041.042-.033.035-.029.028-.019.015-.012.038-.023.062-.039.02-.01c.148-.077.299-.125.459-.145L10 2z"/>
+                    </svg>
+                    3%
+                </div>
+            </div>
+        </div>
+
+        <!-- Closed Tickets Card -->
+        <div class="flex-1 p-4 rounded-2xl border border-gray-200 bg-gray-50">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-center items-center size-10 border border-gray-100 rounded-[0.625rem] bg-white">
+                    <img src="/images/icons/check.svg" alt="" class="w-5 opacity-100">
+                </div>
+            </div>
+
+            <div class="mb-1 text-gray-500">Closed Tickets</div>
+
+            <div class="flex justify-between items-center">
+                <div class="text-body-xl font-semibold text-gray-600">
+                    73
+                </div>
+                <div class="inline-flex items-center gap-0.5 h-5 border rounded-sm border-success-100 bg-success-0 text-success-100 pl-0.75 pr-1.25 text-body-sm font-medium">
+                    <svg class="!size-3.5 fill-success-100" viewBox="0 0 20 20">
+                        <path d="M10 2c.221 0 .429.054.611.148l.01.006.021.01.061.039.04.023.014.012.03.019.034.029.043.033.041.041.014.011 5.2 5.053a1.24 1.24 0 0 1 0 1.786 1.33 1.33 0 0 1-1.838 0L11.3 6.312v10.425c0 .644-.496 1.175-1.137 1.253L10 18c-.718 0-1.3-.566-1.3-1.263V6.311L5.719 9.209a1.33 1.33 0 0 1-1.705.113l-.133-.113a1.24 1.24 0 0 1 0-1.786l5.2-5.053.013-.011.043-.041.042-.033.035-.029.028-.019.015-.012.038-.023.062-.039.02-.01c.148-.077.299-.125.459-.145L10 2z"/>
+                    </svg>
+                    12%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                AuthManager.signOut();
+                window.location.href = '/sign-in';
+            }
+        }
+    </script>
+{% endblock %}

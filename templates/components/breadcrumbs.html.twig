@@ -1,0 +1,25 @@
+{#
+  Breadcrumbs Component - Navigation breadcrumbs with actions
+
+  Usage:
+  {% include 'components/breadcrumbs.html.twig' with {
+    items: ['Management', 'Tickets'],
+    actions: '<button>Action</button>'
+  } %}
+#}
+
+{% set items = items|default([]) %}
+{% set actions = actions|default('') %}
+
+<div class="flex justify-between items-center mb-6 max-md:block">
+  <ul class="flex items-center max-md:hidden">
+    {% for item in items %}
+      <li class="font-medium text-gray-400 {% if not loop.last %}mr-2 after:content-['/'] after:ml-2{% else %}text-gray-900{% endif %}">
+        {{ item }}
+      </li>
+    {% endfor %}
+  </ul>
+  {% if actions %}
+    <div>{{ actions|raw }}</div>
+  {% endif %}
+</div>

@@ -1,0 +1,61 @@
+{#
+  Header Component - Top navigation bar with user profile and notifications
+
+  Usage:
+  {% include 'components/header.html.twig' with {
+    title: 'Dashboard',
+    toggle: false,
+    user: user,
+    onShow: 'showSidebar()'
+  } %}
+#}
+
+{% set title = title|default('Dashboard') %}
+{% set toggle = toggle|default(false) %}
+{% set user = user|default({}) %}
+
+<div data-header class="fixed top-0 right-0 z-20 px-8 bg-white max-md:px-0
+  {% if toggle %}left-18{% else %}left-69 max-xl:left-0{% endif %}">
+
+  <div class="relative flex items-center h-18.25 border-b border-gray-100 max-md:h-16.25 max-md:px-6">
+
+    <!-- Page Title (hidden on mobile) -->
+    <div class="text-h5 max-md:hidden">{{ title }}</div>
+
+    <!-- Right Actions -->
+    <div class="flex items-center ml-auto">
+
+      <!-- Notifications Button -->
+      <button class="relative size-8 border border-gray-100 rounded-full text-0 cursor-pointer outline-none transition-colors hover:bg-gray-25 max-md:border-0">
+        <svg class="size-4 max-md:size-6 max-md:fill-gray-400" viewBox="0 0 20 20">
+          <path d="M11.11 16.947c.343-.301.869-.273 1.176.064a.81.81 0 0 1-.065 1.155C11.615 18.699 10.83 19 10 19s-1.615-.301-2.221-.834a.81.81 0 0 1-.065-1.155c.307-.337.833-.365 1.176-.064.304.267.694.417 1.11.417s.807-.149 1.11-.417zM10 3.382c1.011 0 1.984.252 2.826.722l.2.117c1.435.883 2.319 2.345 2.319 3.949v.508c0 1.092.289 2.171.847 3.153l1.102 1.939c.627 1.104-.259 2.366-1.534 2.366H4.241c-1.275 0-2.162-1.262-1.534-2.366l1.102-1.939c.558-.982.847-2.06.847-3.153v-.508c0-1.605.885-3.066 2.319-3.949l.2-.117c.842-.47 1.815-.723 2.826-.723zm0 1.636c-.723 0-1.412.179-2.003.509l-.138.081c-.964.594-1.538 1.542-1.538 2.563v.508a7.98 7.98 0 0 1-1.058 3.95l-1.069 1.882.011-.007.037-.004h11.519a.13.13 0 0 1 .037.004l.011.007-1.07-1.882c-.632-1.113-.99-2.332-1.049-3.576l-.009-.374v-.508c0-1.021-.574-1.969-1.538-2.562l-.138-.081c-.591-.33-1.28-.509-2.003-.509zM11.666 1c.46 0 .833.366.833.818s-.373.818-.833.818H8.334c-.46 0-.833-.366-.833-.818S7.874 1 8.334 1h3.331z"/>
+        </svg>
+        <div class="absolute top-1.75 right-1.5 size-2 border-[1.5px] border-white rounded-full bg-error-100 max-md:top-1.25 max-md:right-1 max-md:size-2.5"></div>
+      </button>
+
+      <!-- Divider -->
+      <div class="w-0.25 h-5 mx-2.5 bg-gray-100"></div>
+
+      <!-- User Profile -->
+      <a href="/sign-in" class="flex items-center gap-2 max-md:gap-0">
+        <div class="flex justify-center items-center shrink-0 size-8 bg-primary-100 rounded-full">
+          <svg class="size-4 fill-primary-500" viewBox="0 0 20 20">
+            <path d="M10 1.667c2.301 0 4.167 1.865 4.167 4.166 0 2.301-1.866 4.167-4.167 4.167S5.833 8.134 5.833 5.833c0-2.3 1.866-4.166 4.167-4.166zm0 10c4.6 0 8.333 2.234 8.333 4.166v2.5H1.667v-2.5c0-1.932 3.733-4.166 8.333-4.166z"/>
+          </svg>
+        </div>
+
+        <div class="text-body-sm max-md:hidden">
+          <div class="font-semibold">Robert Johnson</div>
+          <div class="text-gray-500">Super Admin</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Sidebar toggle button for mobile -->
+<script>
+  function showSidebar() {
+    document.querySelector('[data-sidebar]').classList.add('visible');
+  }
+</script>

@@ -1,0 +1,98 @@
+{#
+  Modal Component - Dialog/Modal popup
+
+  Usage:
+  <div id="myModal" class="hidden">
+    {% include 'components/modal.html.twig' with {
+      title: 'Confirm Action',
+      content: 'Are you sure?',
+      modalId: 'myModal',
+      isSlidePanel: false
+    } %}
+  </div>
+#}
+
+{% set modalId = modalId|default('modal-' ~ random()) %}
+{% set isSlidePanel = isSlidePanel|default(false) %}
+{% set title = title|default('') %}
+
+<div class="fixed inset-0 z-50 flex items-center justify-center {% if isSlidePanel %}p-0{% else %}p-4{% endif %} modal-overlay hidden">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm" onclick="closeModal('{{ modalId }}')"></div>
+
+  <!-- Modal Container -->
+  <div class="relative z-10 bg-white rounded-xl shadow-lg max-w-md w-full
+    {% if isSlidePanel %}h-full rounded-none max-w-xl ml-auto{% else %}max-h-96 overflow-y-auto{% endif %}">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between p-6 border-b border-gray-100">
+      <h2 class="text-xl font-semibold text-gray-900">{{ title }}</h2>
+      <button onclick="closeModal('{{ modalId }}')" class="text-gray-400 hover:text-gray-600 transition-colors">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="p-6">
+      {{ slot|default(content|default('')) }}
+    </div>
+
+    <!-- Footer (optional) -->
+    {% if showFooter|default(false) %}
+      <div class="flex gap-3 justify-end p-6 border-t border-gray-100">
+        <button onclick="closeModal('{{ modalId }}')"
+                class="px-4 py-2 text-gray-700 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors">
+          Cancel
+        </button>
+        <button onclick="confirmModal('{{ modalId }}')"
+                class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium">
+          Confirm
+        </button>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  function openModal(modalId) {
+    const modal = document.getElementById(modalId) || document.querySelector('[data-modal="' + modalId + '"]');
+    if (modal) {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId) || document.querySelector('[data-modal="' + modalId + '"]');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+  }
+
+  function confirmModal(modalId) {
+    const event = new CustomEvent('modal-confirm', { detail: { modalId } });
+    document.dispatchEvent(event);
+    closeModal(modalId);
+  }
+
+  // Close modal when clicking backdrop
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal(this.id);
+      }
+    });
+  });
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay:not(.hidden)').forEach(modal => {
+        closeModal(modal.id);
+      });
+    }
+  });
+</script>

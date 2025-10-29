@@ -1,0 +1,29 @@
+{% extends "layouts/base.html.twig" %}
+
+{#
+  Dashboard Layout - Main layout for dashboard pages
+  Includes sidebar, header, and main content area
+#}
+
+{% block content %}
+  <div data-main-content class="pt-18 max-md:pt-16.25 pl-69 max-xl:pl-0">
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html.twig' with {
+      toggle: false,
+      visible: false,
+      currentPath: request.getUri()
+    } %}
+
+    <!-- Header -->
+    {% include 'components/header.html.twig' with {
+      title: pageTitle|default('Dashboard'),
+      toggle: false,
+      user: user|default({})
+    } %}
+
+    <!-- Main Content -->
+    <div class="px-8 py-6 max-md:px-6">
+      {% block dashboard_content %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

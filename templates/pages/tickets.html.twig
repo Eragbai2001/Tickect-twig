@@ -1,0 +1,969 @@
+{% extends "layouts/dashboard.html.twig" %}
+
+{% block title %}Tickets - Tickety{% endblock %}
+
+{% block dashboard_content %}
+    <script src="/js/auth.js"></script>
+    <script src="/js/toast.js"></script>
+    <script>
+        // Protect this route - redirect if not authenticated
+        if (!AuthManager.isAuthenticated()) {
+            window.location.href = '/sign-in';
+        }
+    </script>
+
+    <!-- Breadcrumbs -->
+    {% include 'components/breadcrumbs.html.twig' with {
+        items: ['Management', 'Tickets'],
+        actions: '<div class="flex items-center gap-3">
+            <button onclick="openCreateModal()" class="inline-flex items-center justify-center gap-2 h-10 px-3.75 bg-primary-500 border border-transparent text-white fill-white rounded-[0.625rem] text-body-md font-semibold hover:bg-primary-600 transition-all cursor-pointer">
+                Create New Ticket
+            </button>
+        </div>'
+    } %}
+
+    <!-- Stats Cards -->
+    <div class="flex gap-6 mt-6 max-md:flex-col max-md:gap-4">
+        <!-- Total Tickets Card -->
+        <div class="flex-1 p-4 rounded-2xl border border-gray-200 bg-gray-50">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-center items-center size-10 border border-gray-100 rounded-[0.625rem] bg-white">
+                    <img src="/images/icons/sale.svg" alt="" class="w-5 opacity-100">
+                </div>
+            </div>
+            <div class="mb-1 text-gray-500">Total tickets</div>
+            <div class="flex justify-between items-center">
+                <div class="text-body-xl font-semibold text-gray-600" id="totalTickets">0</div>
+            </div>
+        </div>
+
+        <!-- Open Tickets Card -->
+        <div class="flex-1 p-4 rounded-2xl border border-green-200 bg-green-50">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-center items-center size-10 border border-gray-100 rounded-[0.625rem] bg-white">
+                    <img src="/images/icons/ticket.svg" alt="" class="w-5 opacity-100">
+                </div>
+            </div>
+            <div class="mb-1 text-gray-500">Open Tickets</div>
+            <div class="flex justify-between items-center">
+                <div class="text-body-xl font-semibold text-green-600">42</div>
+                <div class="inline-flex items-center gap-0.5 h-5 border rounded-sm border-success-100 bg-success-0 text-success-100 pl-0.75 pr-1.25 text-body-sm font-medium">
+                    <svg class="!size-3.5 fill-success-100" viewBox="0 0 20 20">
+                        <path d="M10 2c.221 0 .429.054.611.148l.01.006.021.01.061.039.04.023.014.012.03.019.034.029.043.033.041.041.014.011 5.2 5.053a1.24 1.24 0 0 1 0 1.786 1.33 1.33 0 0 1-1.838 0L11.3 6.312v10.425c0 .644-.496 1.175-1.137 1.253L10 18c-.718 0-1.3-.566-1.3-1.263V6.311L5.719 9.209a1.33 1.33 0 0 1-1.705.113l-.133-.113a1.24 1.24 0 0 1 0-1.786l5.2-5.053.013-.011.043-.041.042-.033.035-.029.028-.019.015-.012.038-.023.062-.039.02-.01c.148-.077.299-.125.459-.145L10 2z"/>
+                    </svg>
+                    8%
+                </div>
+            </div>
+        </div>
+
+        <!-- In Progress Card -->
+        <div class="flex-1 p-4 rounded-2xl border border-amber-200 bg-amber-50">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-center items-center size-10 border border-gray-100 rounded-[0.625rem] bg-white">
+                    <img src="/images/icons/sale.svg" alt="" class="w-5 opacity-100">
+                </div>
+            </div>
+            <div class="mb-1 text-gray-500">In Progress</div>
+            <div class="flex justify-between items-center">
+                <div class="text-body-xl font-semibold text-amber-600">16</div>
+                <div class="inline-flex items-center gap-0.5 h-5 border rounded-sm border-success-100 bg-success-0 text-success-100 pl-0.75 pr-1.25 text-body-sm font-medium">
+                    <svg class="!size-3.5 fill-success-100" viewBox="0 0 20 20">
+                        <path d="M10 2c.221 0 .429.054.611.148l.01.006.021.01.061.039.04.023.014.012.03.019.034.029.043.033.041.041.014.011 5.2 5.053a1.24 1.24 0 0 1 0 1.786 1.33 1.33 0 0 1-1.838 0L11.3 6.312v10.425c0 .644-.496 1.175-1.137 1.253L10 18c-.718 0-1.3-.566-1.3-1.263V6.311L5.719 9.209a1.33 1.33 0 0 1-1.705.113l-.133-.113a1.24 1.24 0 0 1 0-1.786l5.2-5.053.013-.011.043-.041.042-.033.035-.029.028-.019.015-.012.038-.023.062-.039.02-.01c.148-.077.299-.125.459-.145L10 2z"/>
+                    </svg>
+                    3%
+                </div>
+            </div>
+        </div>
+
+        <!-- Closed Tickets Card -->
+        <div class="flex-1 p-4 rounded-2xl border border-gray-200 bg-gray-50">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-center items-center size-10 border border-gray-100 rounded-[0.625rem] bg-white">
+                    <img src="/images/icons/check.svg" alt="" class="w-5 opacity-100">
+                </div>
+            </div>
+            <div class="mb-1 text-gray-500">Closed Tickets</div>
+            <div class="flex justify-between items-center">
+                <div class="text-body-xl font-semibold text-gray-600">73</div>
+                <div class="inline-flex items-center gap-0.5 h-5 border rounded-sm border-success-100 bg-success-0 text-success-100 pl-0.75 pr-1.25 text-body-sm font-medium">
+                    <svg class="!size-3.5 fill-success-100" viewBox="0 0 20 20">
+                        <path d="M10 2c.221 0 .429.054.611.148l.01.006.021.01.061.039.04.023.014.012.03.019.034.029.043.033.041.041.014.011 5.2 5.053a1.24 1.24 0 0 1 0 1.786 1.33 1.33 0 0 1-1.838 0L11.3 6.312v10.425c0 .644-.496 1.175-1.137 1.253L10 18c-.718 0-1.3-.566-1.3-1.263V6.311L5.719 9.209a1.33 1.33 0 0 1-1.705.113l-.133-.113a1.24 1.24 0 0 1 0-1.786l5.2-5.053.013-.011.043-.041.042-.033.035-.029.028-.019.015-.012.038-.023.062-.039.02-.01c.148-.077.299-.125.459-.145L10 2z"/>
+                    </svg>
+                    12%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tickets Table -->
+    <div id="tickets" class="mt-6">
+        <div class="border border-gray-100 rounded-2xl shadow-[0_0.0625rem_0.125rem_0_rgba(228,229,231,0.24)]">
+            <!-- Table Header -->
+            <div class="flex items-center px-5 py-3 max-md:px-4">
+                <div class="mr-auto text-body-lg font-semibold">Tickets Table</div>
+                <div class="flex gap-3">
+                    <div class="relative w-64 max-lg:hidden">
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search"
+                            class="w-full h-10 pl-10 pr-4 border border-gray-100 rounded-[0.625rem] text-body-md text-gray-900 outline-none focus:border-primary-500"
+                        />
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 size-5 fill-gray-400" viewBox="0 0 20 20">
+                            <path d="M9.167 15.833c-3.682 0-6.667-2.985-6.667-6.666 0-3.682 2.985-6.667 6.667-6.667 3.681 0 6.666 2.985 6.666 6.667 0 3.681-2.985 6.666-6.666 6.666zm0-11.666c-2.76 0-5 2.24-5 5 0 2.76 2.24 5 5 5 2.76 0 5-2.24 5-5 0-2.76-2.24-5-5-5zm7.386 12.886l-2.357-2.357 1.178-1.179 2.357 2.357-1.178 1.179z"/>
+                        </svg>
+                    </div>
+
+                    <!-- Filter Button -->
+                    <div class="relative">
+                        <button
+                            id="filterButton"
+                            onclick="toggleFilter()"
+                            class="group flex justify-center items-center px-2.75 gap-2 h-10 border border-gray-100 rounded-[0.625rem] shadow-xs text-body-md font-medium text-gray-500 cursor-pointer outline-none transition-colors hover:text-gray-900 max-md:!gap-0 max-md:!w-10 max-md:!px-0 max-md:!text-0"
+                        >
+                            <svg class="!size-4 fill-gray-400 transition-colors group-hover:fill-gray-900" viewBox="0 0 20 20">
+                                <path d="M8 15V13H12V15H8ZM5 11V9H15V11H5ZM2 7V5H18V7H2Z"/>
+                            </svg>
+                            <span class="max-md:hidden">Filter</span>
+                        </button>
+
+                        <!-- Filter Popover -->
+                        <div id="filterPopover" class="hidden absolute right-0 top-full mt-2 z-20 flex flex-col gap-4 w-72 p-5 border border-gray-100 rounded-2xl bg-white shadow-[0_1rem_2rem_-0.0625rem_rgba(128,136,151,0.20)]">
+                            <div>
+                                <div class="mb-2 font-semibold">Amount, $</div>
+                                <div class="flex gap-2">
+                                    <input
+                                        type="number"
+                                        id="amountStart"
+                                        value="0"
+                                        class="flex-1 h-10 px-3 border border-gray-100 rounded-xl text-body-md text-gray-900 outline-none focus:border-primary-500"
+                                    />
+                                    <input
+                                        type="number"
+                                        id="amountEnd"
+                                        value="1000"
+                                        class="flex-1 h-10 px-3 border border-gray-100 rounded-xl text-body-md text-gray-900 outline-none focus:border-primary-500"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="mb-2 font-semibold">Status</div>
+                                <div class="flex flex-col items-start gap-2">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" id="filterActive" class="w-4 h-4" checked />
+                                        <span>Active</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" id="filterSoldOut" class="w-4 h-4" checked />
+                                        <span>Sold Out</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button
+                                    onclick="clearFilters()"
+                                    class="flex-1 h-10 px-3 border border-gray-100 rounded-xl text-body-md font-semibold text-gray-900 hover:bg-gray-50 transition-colors cursor-pointer"
+                                >
+                                    Clear
+                                </button>
+                                <button
+                                    onclick="applyFilters()"
+                                    class="flex-1 h-10 px-3 bg-primary-500 text-white rounded-xl text-body-md font-semibold hover:bg-primary-600 transition-colors cursor-pointer"
+                                >
+                                    Apply
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sort By Button -->
+                    <div class="relative">
+                        <button
+                            id="sortButton"
+                            onclick="toggleSort()"
+                            class="group flex justify-center items-center px-2.75 gap-2 h-10 border border-gray-100 rounded-[0.625rem] shadow-xs text-body-md font-medium text-gray-500 cursor-pointer outline-none transition-colors hover:text-gray-900 max-md:!gap-0 max-md:!w-10 max-md:!px-0 max-md:!text-0"
+                        >
+                            <svg class="!size-4 fill-gray-400 transition-colors group-hover:fill-gray-900" viewBox="0 0 20 20">
+                                <path d="M6.25 15L2.5 11.25L3.575 10.175L5.625 12.225V5H7.125V12.225L9.175 10.175L10.25 11.25L6.25 15ZM12.125 15V7.775L10.075 9.825L9 8.75L13 4.75L17 8.75L15.925 9.825L13.875 7.775V15H12.125Z"/>
+                            </svg>
+                            <span class="max-md:hidden">Sort by</span>
+                        </button>
+
+                        <!-- Sort Popover -->
+                        <div id="sortPopover" class="hidden absolute right-0 top-full mt-2 z-20 flex flex-col gap-0.5 w-54 p-2 border border-gray-100 rounded-2xl bg-white shadow-[0_1rem_2rem_-0.0625rem_rgba(128,136,151,0.20)]">
+                            <button
+                                onclick="sortTickets('name-asc')"
+                                class="flex items-center h-10 px-4 rounded-lg font-medium transition-colors hover:bg-gray-25 text-left"
+                            >
+                                By name (A → Z)
+                            </button>
+                            <button
+                                onclick="sortTickets('name-desc')"
+                                class="flex items-center h-10 px-4 rounded-lg font-medium transition-colors hover:bg-gray-25 text-left"
+                            >
+                                By name (Z → A)
+                            </button>
+                            <button
+                                onclick="sortTickets('price-asc')"
+                                class="flex items-center h-10 px-4 rounded-lg font-medium transition-colors hover:bg-gray-25 text-left"
+                            >
+                                Price: Low → High
+                            </button>
+                            <button
+                                onclick="sortTickets('price-desc')"
+                                class="flex items-center h-10 px-4 rounded-lg font-medium transition-colors hover:bg-gray-25 text-left"
+                            >
+                                Price: High → Low
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Content -->
+            <div class="px-5 py-2 max-lg:overflow-x-auto max-lg:scrollbar-none max-md:px-4">
+                <table class="w-full text-body-md font-medium [&_th,&_td]:pl-3 [&_th,&_td]:last:pr-3 [&_th]:relative [&_th]:z-2 [&_th]:font-medium [&_th]:text-left [&_th]:text-gray-500 max-lg:min-w-268">
+                    <thead>
+                        <tr class="relative [&_th]:py-2.25 after:absolute after:inset-0 after:border after:border-gray-100 after:bg-gray-25 after:rounded-[0.625rem] max-md:[&_th]:bg-gray-25 max-md:[&_th]:first:rounded-l-[0.625rem] max-md:[&_th]:last:rounded-r-[0.625rem] max-md:after:hidden">
+                            <th class="w-13 !pl-2.5 max-2xl:w-10">No</th>
+                            <th>Ticket Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Sold</th>
+                            <th>Sales Status</th>
+                            <th>Visibility</th>
+                            <th class="w-11"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticketsTableBody">
+                        <tr>
+                            <td colspan="8" class="text-center py-12 text-gray-500">
+                                Loading tickets...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Table Footer / Pagination -->
+            <div class="flex items-center px-5 py-4 max-md:justify-between max-md:px-4">
+                <div class="font-medium">
+                    <div class="max-md:hidden" id="paginationInfo">Showing 0 to 0 of 0 results</div>
+                    <div class="hidden max-md:block">Page 1 of 1</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Slide-in Panel -->
+    <div id="ticketModal" class="fixed inset-0 bg-gray-900/50 backdrop-blur-[0.125rem] hidden z-50 transition-opacity duration-300" style="display: none;" onclick="handleBackdropClick(event)">
+        <div id="ticketPanel" class="fixed right-0 top-0 h-screen w-135 max-2xl:w-110 max-lg:w-100 max-md:w-full bg-white rounded-l-2xl shadow-xl flex flex-col transition-transform duration-300 ease-out translate-x-full max-md:rounded-l-none">
+            <!-- Panel Header -->
+            <div class="flex justify-between items-center p-6 border-b border-gray-100 max-md:p-4">
+                <div id="modalTitle" class="text-body-xl font-semibold max-md:text-body-lg">New Ticket</div>
+                <button
+                    onclick="closeModal()"
+                    class="flex justify-center items-center shrink-0 size-10 ml-4 border border-gray-100 rounded-full shadow-xs transition-colors hover:bg-gray-25"
+                >
+                    <svg class="size-6 fill-gray-500 transition-colors hover:fill-gray-900" viewBox="0 0 24 24">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Panel Content -->
+            <div class="flex-1 p-6 overflow-auto scrollbar-none max-md:p-4">
+                <form id="ticketForm" class="flex flex-col gap-4">
+                <!-- Ticket Name -->
+                <div>
+                    <label class="block font-medium text-gray-500 mb-2">
+                        Ticket Name <span class="text-red-500 text-error-100">*</span>
+                    </label>
+                    <select
+                        id="ticketName"
+                        name="ticketName"
+                        class="w-full h-13 px-3 pr-10 border border-gray-100 rounded-xl text-body-lg text-gray-900 transition-all outline-0 appearance-none bg-white bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 fill=%22%23cbd5e0%22%3e%3cpath d=%22M7 7l3 3 3-3%22 stroke=%22%23cbd5e0%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3e%3c/svg%3e')] bg-[length:1.25rem_1.25rem] bg-[right_0.75rem_center] bg-no-repeat hover:border-primary-500 focus:!border-primary-500 focus:bg-primary-50 cursor-pointer"
+                    >
+                        <option value="">Select ticket type...</option>
+                        <option value="VIP">VIP</option>
+                        <option value="General">General</option>
+                        <option value="Early Bird">Early Bird</option>
+                    </select>
+                    <span id="error-ticketName" class="text-red-500 text-sm mt-1 hidden"></span>
+                </div>
+
+                <!-- Price -->
+                <div>
+                    <label class="block font-medium text-gray-500 mb-2">
+                        Price <span class="text-red-500 text-error-100">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        placeholder="Enter price"
+                        step="0.01"
+                        min="0"
+                        class="w-full h-13 px-3 border border-gray-100 rounded-xl text-body-lg text-gray-900 transition-colors outline-0 focus:!border-primary-500 focus:bg-primary-50"
+                    />
+                    <span id="error-price" class="text-red-500 text-sm mt-1 hidden"></span>
+                </div>
+
+                <!-- Quantity -->
+                <div>
+                    <label class="block font-medium text-gray-500 mb-2">
+                        Quantity <span class="text-red-500 text-error-100">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        placeholder="Enter quantity"
+                        min="0"
+                        class="w-full h-13 px-3 border border-gray-100 rounded-xl text-body-lg text-gray-900 transition-colors outline-0 focus:!border-primary-500 focus:bg-primary-50"
+                    />
+                    <span id="error-quantity" class="text-red-500 text-sm mt-1 hidden"></span>
+                </div>
+
+                <!-- Sold -->
+                <div>
+                    <label class="block font-medium text-gray-500 mb-2">
+                        Sold <span class="text-red-500 text-error-100">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="sold"
+                        name="sold"
+                        placeholder="Number sold"
+                        min="0"
+                        class="w-full h-13 px-3 border border-gray-100 rounded-xl text-body-lg text-gray-900 transition-colors outline-0 focus:!border-primary-500 focus:bg-primary-50"
+                    />
+                    <span id="error-sold" class="text-red-500 text-sm mt-1 hidden"></span>
+                </div>
+
+                <!-- Sales Status -->
+                <div>
+                    <label class="block font-medium text-gray-500 mb-2">
+                        Sales Status <span class="text-red-500 text-error-100">*</span>
+                    </label>
+                    <select
+                        id="salesStatus"
+                        name="salesStatus"
+                        class="w-full h-13 px-3 pr-10 border border-gray-100 rounded-xl text-body-lg text-gray-900 transition-all outline-0 appearance-none bg-white bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 fill=%22%23cbd5e0%22%3e%3cpath d=%22M7 7l3 3 3-3%22 stroke=%22%23cbd5e0%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3e%3c/svg%3e')] bg-[length:1.25rem_1.25rem] bg-[right_0.75rem_center] bg-no-repeat hover:border-primary-500 focus:!border-primary-500 focus:bg-primary-50 cursor-pointer"
+                    >
+                        <option value="">Select status...</option>
+                        <option value="Active">Active</option>
+                        <option value="Sold Out">Sold Out</option>
+                    </select>
+                    <span id="error-salesStatus" class="text-red-500 text-sm mt-1 hidden"></span>
+                </div>
+
+                <!-- Visibility -->
+                <div>
+                    <label class="block font-medium text-gray-500 mb-2">
+                        Visibility <span class="text-red-500 text-error-100">*</span>
+                    </label>
+                    <select
+                        id="visibility"
+                        name="visibility"
+                        class="w-full h-13 px-3 pr-10 border border-gray-100 rounded-xl text-body-lg text-gray-900 transition-all outline-0 appearance-none bg-white bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 fill=%22%23cbd5e0%22%3e%3cpath d=%22M7 7l3 3 3-3%22 stroke=%22%23cbd5e0%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3e%3c/svg%3e')] bg-[length:1.25rem_1.25rem] bg-[right_0.75rem_center] bg-no-repeat hover:border-primary-500 focus:!border-primary-500 focus:bg-primary-50 cursor-pointer"
+                    >
+                        <option value="">Select visibility...</option>
+                        <option value="Public">Public</option>
+                        <option value="Private">Private</option>
+                    </select>
+                    <span id="error-visibility" class="text-red-500 text-sm mt-1 hidden"></span>
+                </div>
+
+                </form>
+            </div>
+
+            <!-- Panel Footer -->
+            <div class="flex justify-between items-center p-6 border-t border-gray-100 max-md:p-4">
+                <button
+                    type="button"
+                    id="submitBtn"
+                    onclick="handleFormSubmit()"
+                    class="h-10 px-6 bg-primary-500 text-white rounded-[0.625rem] text-body-md font-semibold hover:bg-primary-600 transition-colors cursor-pointer"
+                >
+                    Create
+                </button>
+                <button
+                    type="button"
+                    onclick="closeModal()"
+                    class="h-10 px-6 border border-gray-100 rounded-[0.625rem] text-body-md font-semibold text-gray-900 hover:bg-gray-50 transition-colors cursor-pointer"
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" style="display: none;">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+            <h3 class="text-h4 mb-2">Delete Ticket</h3>
+            <p class="text-gray-600 text-body-lg mb-8">
+                Are you sure you want to delete this ticket? This action cannot be undone.
+            </p>
+            <div class="flex gap-3">
+                <button
+                    type="button"
+                    onclick="closeDeleteModal()"
+                    class="flex-1 h-13 px-3 border border-gray-100 rounded-xl text-body-lg font-semibold text-gray-900 hover:bg-gray-50 transition-colors cursor-pointer"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="button"
+                    id="confirmDeleteBtn"
+                    onclick="confirmDelete()"
+                    class="flex-1 h-13 px-3 bg-error-100 text-white rounded-xl text-body-lg font-semibold hover:bg-error-200 transition-colors cursor-pointer"
+                >
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TICKETS_KEY = 'tickets_store_v1';
+        let tickets = [];
+        let filteredTickets = [];
+        let editingId = null;
+        let deleteId = null;
+        let currentSort = null;
+
+        // Load tickets on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTickets();
+            initSearch();
+        });
+
+        /**
+         * Load tickets from localStorage
+         */
+        function loadTickets() {
+            try {
+                const stored = localStorage.getItem(TICKETS_KEY);
+                tickets = stored ? JSON.parse(stored) : [];
+                renderTickets();
+            } catch (e) {
+                ToastSystem.error('Failed to load tickets');
+                console.error('Load error:', e);
+                renderTickets();
+            }
+        }
+
+        /**
+         * Save tickets to localStorage
+         */
+        function saveTickets() {
+            try {
+                localStorage.setItem(TICKETS_KEY, JSON.stringify(tickets));
+            } catch (e) {
+                ToastSystem.error('Failed to save tickets');
+                console.error('Save error:', e);
+            }
+        }
+
+        /**
+         * Render tickets table
+         */
+        function renderTickets() {
+            const tbody = document.getElementById('ticketsTableBody');
+            const totalElement = document.getElementById('totalTickets');
+            const paginationInfo = document.getElementById('paginationInfo');
+
+            if (tickets.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-12 text-gray-500">No tickets yet. Create your first ticket!</td></tr>';
+                totalElement.textContent = '0';
+                paginationInfo.textContent = 'Showing 0 to 0 of 0 results';
+            } else {
+                tbody.innerHTML = tickets.map((ticket, index) => createTicketRow(ticket, index + 1)).join('');
+                totalElement.textContent = tickets.length;
+                paginationInfo.textContent = `Showing 1 to ${tickets.length} of ${tickets.length} results`;
+            }
+        }
+
+        /**
+         * Create HTML for a ticket table row
+         */
+        function createTicketRow(ticket, rowNumber) {
+            const s = (ticket.salesStatus || '').toLowerCase().replace(/\s+/g, '_');
+            const statusClass = s.includes('open') || s.includes('active')
+                ? 'status status-green'
+                : s.includes('in_progress') || s.includes('in-progress') || s.includes('progress')
+                ? 'status status-yellow'
+                : 'status status-gray';
+
+            const visibilityClass = ticket.visibility === 'Hidden'
+                ? 'status status-red'
+                : 'status status-green';
+
+            return `
+                <tr class="relative [&_td]:py-3 after:absolute after:inset-0 after:border-b after:border-gray-100">
+                    <td class="!pl-2.5 text-gray-900">${rowNumber}</td>
+                    <td class="text-gray-900">${escapeHtml(ticket.ticketName)}</td>
+                    <td class="text-gray-900">$${parseFloat(ticket.price).toFixed(2)}</td>
+                    <td class="text-gray-900">${ticket.quantity}</td>
+                    <td class="text-gray-900">${ticket.sold}</td>
+                    <td>
+                        <div class="${statusClass}">${escapeHtml(ticket.salesStatus)}</div>
+                    </td>
+                    <td>
+                        <div class="${visibilityClass}">${escapeHtml(ticket.visibility)}</div>
+                    </td>
+                    <td class="w-11">
+                        <div class="relative">
+                            <button
+                                onclick="toggleActions('${ticket.id}')"
+                                class="flex items-center justify-center size-8 rounded-lg hover:bg-gray-50 transition-colors"
+                            >
+                                <svg class="size-5 fill-gray-500" viewBox="0 0 20 20">
+                                    <circle cx="10" cy="4" r="1.5"/>
+                                    <circle cx="10" cy="10" r="1.5"/>
+                                    <circle cx="10" cy="16" r="1.5"/>
+                                </svg>
+                            </button>
+                            <div id="actions-${ticket.id}" class="hidden absolute right-0 mt-1 w-32 bg-white border border-gray-100 rounded-lg shadow-lg z-10">
+                                <button onclick="openEditModal('${ticket.id}'); hideActions('${ticket.id}')" class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 rounded-t-lg">
+                                    Edit
+                                </button>
+                                <button onclick="openDeleteModal('${ticket.id}'); hideActions('${ticket.id}')" class="w-full px-4 py-2 text-left text-sm text-error-100 hover:bg-gray-50 rounded-b-lg">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        /**
+         * Toggle action menu
+         */
+        function toggleActions(id) {
+            const menu = document.getElementById(`actions-${id}`);
+            const allMenus = document.querySelectorAll('[id^="actions-"]');
+            allMenus.forEach(m => {
+                if (m.id !== `actions-${id}`) m.classList.add('hidden');
+            });
+            menu.classList.toggle('hidden');
+        }
+
+        /**
+         * Hide action menu
+         */
+        function hideActions(id) {
+            const menu = document.getElementById(`actions-${id}`);
+            menu.classList.add('hidden');
+        }
+
+        /**
+         * Open create ticket modal with slide-in animation
+         */
+        function openCreateModal() {
+            editingId = null;
+            document.getElementById('modalTitle').textContent = 'New Ticket';
+            document.getElementById('submitBtn').textContent = 'Create';
+            document.getElementById('ticketForm').reset();
+            clearErrors();
+
+            const modal = document.getElementById('ticketModal');
+            const panel = document.getElementById('ticketPanel');
+
+            modal.style.display = 'block';
+            modal.classList.remove('hidden');
+
+            // Trigger animation after a brief delay
+            setTimeout(() => {
+                panel.classList.remove('translate-x-full');
+                panel.classList.add('translate-x-0');
+            }, 10);
+        }
+
+        /**
+         * Open edit modal with slide-in animation
+         */
+        function openEditModal(id) {
+            const ticket = tickets.find(t => t.id === id);
+            if (!ticket) return;
+
+            editingId = id;
+            document.getElementById('modalTitle').textContent = 'Edit Ticket';
+            document.getElementById('submitBtn').textContent = 'Update';
+
+            document.getElementById('ticketName').value = ticket.ticketName;
+            document.getElementById('price').value = ticket.price;
+            document.getElementById('quantity').value = ticket.quantity;
+            document.getElementById('sold').value = ticket.sold;
+            document.getElementById('salesStatus').value = ticket.salesStatus;
+            document.getElementById('visibility').value = ticket.visibility;
+
+            clearErrors();
+
+            const modal = document.getElementById('ticketModal');
+            const panel = document.getElementById('ticketPanel');
+
+            modal.style.display = 'block';
+            modal.classList.remove('hidden');
+
+            // Trigger animation after a brief delay
+            setTimeout(() => {
+                panel.classList.remove('translate-x-full');
+                panel.classList.add('translate-x-0');
+            }, 10);
+        }
+
+        /**
+         * Close modal with slide-out animation
+         */
+        function closeModal() {
+            const panel = document.getElementById('ticketPanel');
+            const modal = document.getElementById('ticketModal');
+
+            // Trigger slide-out animation
+            panel.classList.remove('translate-x-0');
+            panel.classList.add('translate-x-full');
+
+            // Hide modal after animation completes
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.classList.add('hidden');
+                editingId = null;
+            }, 300); // Match the transition duration
+        }
+
+        /**
+         * Handle backdrop click to close modal
+         */
+        function handleBackdropClick(event) {
+            if (event.target.id === 'ticketModal') {
+                closeModal();
+            }
+        }
+
+        /**
+         * Open delete confirmation modal
+         */
+        function openDeleteModal(id) {
+            deleteId = id;
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        /**
+         * Close delete modal
+         */
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            deleteId = null;
+        }
+
+        /**
+         * Confirm delete
+         */
+        function confirmDelete() {
+            if (!deleteId) return;
+
+            tickets = tickets.filter(t => t.id !== deleteId);
+            saveTickets();
+            renderTickets();
+            closeDeleteModal();
+            ToastSystem.success('Ticket deleted successfully');
+        }
+
+        /**
+         * Validate form
+         */
+        function validateForm() {
+            const errors = {};
+            const ticketName = document.getElementById('ticketName').value.trim();
+            const price = document.getElementById('price').value.trim();
+            const quantity = document.getElementById('quantity').value.trim();
+            const sold = document.getElementById('sold').value.trim();
+            const salesStatus = document.getElementById('salesStatus').value.trim();
+            const visibility = document.getElementById('visibility').value.trim();
+
+            if (!ticketName) errors.ticketName = 'Ticket type is required';
+            if (!price || isNaN(price) || parseFloat(price) < 0) errors.price = 'Valid price is required';
+            if (!quantity || isNaN(quantity) || parseInt(quantity) < 0) errors.quantity = 'Valid quantity is required';
+            if (!sold || isNaN(sold) || parseInt(sold) < 0) errors.sold = 'Valid sold amount is required';
+            if (!salesStatus) errors.salesStatus = 'Sales status is required';
+            if (!visibility) errors.visibility = 'Visibility is required';
+
+            displayErrors(errors);
+            return Object.keys(errors).length === 0;
+        }
+
+        /**
+         * Display validation errors
+         */
+        function displayErrors(errors) {
+            clearErrors();
+            Object.entries(errors).forEach(([field, message]) => {
+                const errorSpan = document.getElementById(`error-${field}`);
+                if (errorSpan) {
+                    errorSpan.textContent = message;
+                    errorSpan.classList.remove('hidden');
+                }
+            });
+        }
+
+        /**
+         * Clear all errors
+         */
+        function clearErrors() {
+            document.querySelectorAll('[id^="error-"]').forEach(span => {
+                span.classList.add('hidden');
+                span.textContent = '';
+            });
+        }
+
+        /**
+         * Handle form submission
+         */
+        function handleFormSubmit(e) {
+            if (e) e.preventDefault();
+
+            if (!validateForm()) return;
+
+            const formData = {
+                ticketName: document.getElementById('ticketName').value.trim(),
+                price: document.getElementById('price').value.trim(),
+                quantity: document.getElementById('quantity').value.trim(),
+                sold: document.getElementById('sold').value.trim(),
+                salesStatus: document.getElementById('salesStatus').value.trim(),
+                visibility: document.getElementById('visibility').value.trim()
+            };
+
+            if (editingId) {
+                // Update existing ticket
+                const index = tickets.findIndex(t => t.id === editingId);
+                if (index !== -1) {
+                    tickets[index] = {
+                        ...tickets[index],
+                        ...formData
+                    };
+                    ToastSystem.success('Ticket updated successfully');
+                }
+            } else {
+                // Create new ticket
+                const newTicket = {
+                    id: Date.now().toString(),
+                    ...formData,
+                    createdAt: new Date().toISOString()
+                };
+                tickets.unshift(newTicket);
+                ToastSystem.success('Ticket created successfully');
+            }
+
+            saveTickets();
+            renderTickets();
+            closeModal();
+        }
+
+        // Attach form submit handler
+        document.getElementById('ticketForm').addEventListener('submit', handleFormSubmit);
+
+        /**
+         * Utility: Escape HTML
+         */
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        /**
+         * Utility: Format date
+         */
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        // Close modals when clicking outside
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDeleteModal();
+        });
+
+        // Close popovers when clicking outside
+        document.addEventListener('click', function(e) {
+            const filterPopover = document.getElementById('filterPopover');
+            const filterButton = document.getElementById('filterButton');
+            const sortPopover = document.getElementById('sortPopover');
+            const sortButton = document.getElementById('sortButton');
+
+            if (!filterButton.contains(e.target) && !filterPopover.contains(e.target)) {
+                filterPopover.classList.add('hidden');
+                filterButton.classList.remove('bg-gray-25', 'text-gray-900');
+            }
+
+            if (!sortButton.contains(e.target) && !sortPopover.contains(e.target)) {
+                sortPopover.classList.add('hidden');
+                sortButton.classList.remove('bg-gray-25', 'text-gray-900');
+            }
+        });
+
+        /**
+         * Toggle filter popover
+         */
+        function toggleFilter() {
+            const popover = document.getElementById('filterPopover');
+            const button = document.getElementById('filterButton');
+            const sortPopover = document.getElementById('sortPopover');
+            const sortButton = document.getElementById('sortButton');
+
+            // Close sort if open
+            sortPopover.classList.add('hidden');
+            sortButton.classList.remove('bg-gray-25', 'text-gray-900');
+
+            // Toggle filter
+            popover.classList.toggle('hidden');
+            button.classList.toggle('bg-gray-25');
+            button.classList.toggle('text-gray-900');
+        }
+
+        /**
+         * Toggle sort popover
+         */
+        function toggleSort() {
+            const popover = document.getElementById('sortPopover');
+            const button = document.getElementById('sortButton');
+            const filterPopover = document.getElementById('filterPopover');
+            const filterButton = document.getElementById('filterButton');
+
+            // Close filter if open
+            filterPopover.classList.add('hidden');
+            filterButton.classList.remove('bg-gray-25', 'text-gray-900');
+
+            // Toggle sort
+            popover.classList.toggle('hidden');
+            button.classList.toggle('bg-gray-25');
+            button.classList.toggle('text-gray-900');
+        }
+
+        /**
+         * Apply filters to tickets
+         */
+        function applyFilters() {
+            const amountStart = parseFloat(document.getElementById('amountStart').value) || 0;
+            const amountEnd = parseFloat(document.getElementById('amountEnd').value) || Infinity;
+            const filterActive = document.getElementById('filterActive').checked;
+            const filterSoldOut = document.getElementById('filterSoldOut').checked;
+
+            filteredTickets = tickets.filter(ticket => {
+                const price = parseFloat(ticket.price);
+                const status = ticket.salesStatus.toLowerCase();
+
+                // Check price range
+                if (price < amountStart || price > amountEnd) return false;
+
+                // Check status
+                if (!filterActive && (status.includes('active') || status.includes('open'))) return false;
+                if (!filterSoldOut && status.includes('sold')) return false;
+
+                return true;
+            });
+
+            renderTickets(filteredTickets);
+            toggleFilter();
+        }
+
+        /**
+         * Clear all filters
+         */
+        function clearFilters() {
+            document.getElementById('amountStart').value = '0';
+            document.getElementById('amountEnd').value = '1000';
+            document.getElementById('filterActive').checked = true;
+            document.getElementById('filterSoldOut').checked = true;
+
+            filteredTickets = [];
+            renderTickets();
+            toggleFilter();
+        }
+
+        /**
+         * Sort tickets
+         */
+        function sortTickets(sortType) {
+            let sorted = [...(filteredTickets.length > 0 ? filteredTickets : tickets)];
+
+            switch(sortType) {
+                case 'name-asc':
+                    sorted.sort((a, b) => a.ticketName.localeCompare(b.ticketName));
+                    break;
+                case 'name-desc':
+                    sorted.sort((a, b) => b.ticketName.localeCompare(a.ticketName));
+                    break;
+                case 'price-asc':
+                    sorted.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+                    break;
+                case 'price-desc':
+                    sorted.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+                    break;
+            }
+
+            currentSort = sortType;
+            if (filteredTickets.length > 0) {
+                filteredTickets = sorted;
+            }
+            renderTickets(sorted);
+            toggleSort();
+        }
+
+        /**
+         * Initialize search functionality
+         */
+        function initSearch() {
+            const searchInput = document.getElementById('searchInput');
+            if (!searchInput) return;
+
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase().trim();
+
+                if (!searchTerm) {
+                    renderTickets(filteredTickets.length > 0 ? filteredTickets : tickets);
+                    return;
+                }
+
+                const baseTickets = filteredTickets.length > 0 ? filteredTickets : tickets;
+                const searched = baseTickets.filter(ticket => {
+                    return ticket.ticketName.toLowerCase().includes(searchTerm) ||
+                           ticket.price.toString().includes(searchTerm) ||
+                           ticket.salesStatus.toLowerCase().includes(searchTerm) ||
+                           ticket.visibility.toLowerCase().includes(searchTerm);
+                });
+
+                renderTickets(searched);
+            });
+        }
+
+        /**
+         * Update renderTickets to accept optional ticket array
+         */
+        const originalRenderTickets = renderTickets;
+        renderTickets = function(ticketsToRender = null) {
+            const displayTickets = ticketsToRender || (filteredTickets.length > 0 ? filteredTickets : tickets);
+            const tbody = document.getElementById('ticketsTableBody');
+            const totalElement = document.getElementById('totalTickets');
+            const paginationInfo = document.getElementById('paginationInfo');
+
+            if (displayTickets.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-12 text-gray-500">No tickets found</td></tr>';
+                totalElement.textContent = '0';
+                paginationInfo.textContent = 'Showing 0 to 0 of 0 results';
+            } else {
+                tbody.innerHTML = displayTickets.map((ticket, index) => createTicketRow(ticket, index + 1)).join('');
+                totalElement.textContent = tickets.length;
+                paginationInfo.textContent = `Showing 1 to ${displayTickets.length} of ${displayTickets.length} results`;
+            }
+        };
+    </script>
+{% endblock %}

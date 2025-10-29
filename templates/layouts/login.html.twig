@@ -1,0 +1,101 @@
+{#
+  Login Layout
+  Wrapper for authentication pages (matches React Login component exactly)
+#}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Tickety - Authentication{% endblock %}</title>
+    <link rel="icon" href="/images/logo.png" type="image/png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/custom.css">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Pattern dots background - exact match to React */
+        .pattern-dots {
+            background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Radial mask from center 0% to 70% */
+        .mask-radial-at-center {
+            mask-image: radial-gradient(circle at center, black 0%, black 70%, transparent 70%);
+            -webkit-mask-image: radial-gradient(circle at center, black 0%, black 70%, transparent 70%);
+            mask-size: 100% 100%;
+            -webkit-mask-size: 100% 100%;
+        }
+
+        /* Responsive background */
+        @media (max-width: 768px) {
+            body.max-md\:bg-gray-25 {
+                background-color: rgb(248, 249, 250);
+            }
+        }
+    </style>
+</head>
+<body class="relative max-md:bg-gray-25" style="background-color: white;">
+    <!-- Pattern Background (desktop only) - hidden on mobile -->
+    <div class="absolute inset-0 pattern-dots bg-gray-25 mask-radial-at-center mask-radial-from-0% mask-radial-to-70% max-md:hidden"></div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 flex justify-center items-center min-h-screen pt-25 pb-21 max-md:pt-16 max-md:pb-16">
+        <!-- Logo Section (top) -->
+        <div class="absolute top-0 left-0 right-0 flex justify-center py-8 max-md:py-4 z-20">
+            <a class="flex items-center gap-3" href="/">
+                <img src="/images/logo.png" width="32" height="32" alt="Tickety" class="w-1o opacity-100">
+                <div class="text-h4 max-md:text-h5">Tickety</div>
+            </a>
+        </div>
+
+        <!-- Form Container -->
+        <div class="px-6 pt-3 pb-6 max-md:w-full max-md:py-4">
+            <div class="w-125 p-8 bg-white rounded-2xl max-md:w-full max-md:px-4 max-md:py-5">
+                <!-- Image Icon with gradient background -->
+                {% if image %}
+                    <div class="relative flex justify-center items-center size-21 mx-auto mb-4 max-md:size-14 max-md:mb-2">
+                        <div class="absolute inset-0 rounded-full border border-[#E8F0FF] bg-[#E8F0FF]/48 mask-b-from-5%"></div>
+                        <div class="relative z-2 flex justify-center items-center size-13 border border-primary-100 rounded-full bg-white shadow-[0_0.125rem_0.25rem_0_rgba(250,219,225,0.04)] max-md:size-9">
+                            <img src="{{ image }}" width="24" height="24" alt="" class="w-6 opacity-100 max-md:w-4.5">
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Title and Description -->
+                <div class="mb-8 text-center max-md:mb-5">
+                    {% if title %}
+                        <div class="text-h4 max-md:text-h5">{{ title }}</div>
+                    {% endif %}
+                    {% if description %}
+                        <div class="mt-2 text-body-lg text-gray-500 max-md:mt-1 max-md:text-body-md">{{ description }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Form Block -->
+                {% block form %}{% endblock %}
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="absolute left-0 right-0 bottom-0 flex justify-between items-center h-21 px-8 max-md:justify-center max-md:h-16 z-20">
+            <div class="text-gray-500 max-md:text-center">
+                © 2025 Tickety. All right reserved.
+            </div>
+            <div class="flex gap-6 max-md:hidden">
+                {% block footer %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

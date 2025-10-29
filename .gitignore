@@ -1,0 +1,32 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Composer
+/vendor/
+composer.phar
+composer.lock
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+
+# Cache
+/cache/
+/tmp/
+
+# Uploads (optional)
+/public/uploads/
+
+# Node modules
+node_modules/

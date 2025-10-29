@@ -1,0 +1,22 @@
+{#
+  Card Component
+
+  Usage:
+  {% include 'components/card.html.twig' with {
+    title: 'Title',
+    content: 'Card content here',
+    className: ''
+  } %}
+#}
+
+<div class="bg-white border border-gray-100 rounded-xl p-6 shadow-xs {% if className %}{{ className }}{% endif %}">
+  {% if title %}
+    <h3 class="text-h6 font-semibold text-gray-900 mb-2">{{ title }}</h3>
+  {% endif %}
+
+  {% if content %}
+    <div class="text-body-md text-gray-700">{{ content }}</div>
+  {% else %}
+    {{ slot|default('') }}
+  {% endif %}
+</div>

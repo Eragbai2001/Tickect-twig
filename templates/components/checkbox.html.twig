@@ -1,0 +1,28 @@
+{#
+  Checkbox Component
+
+  Usage:
+  {% include 'components/checkbox.html.twig' with {
+    label: 'Keep me logged in',
+    name: 'remember',
+    checked: remember|default(false)
+  } %}
+#}
+
+{% set checkboxId = checkboxId|default('checkbox-' ~ random()) %}
+
+<div class="flex items-center gap-2">
+  <input
+    id="{{ checkboxId }}"
+    type="checkbox"
+    name="{{ name|default('') }}"
+    class="w-4 h-4 text-primary-500 rounded cursor-pointer"
+    {% if checked %}checked{% endif %}
+    {% if disabled %}disabled{% endif %}
+  />
+  {% if label %}
+    <label for="{{ checkboxId }}" class="text-body-md cursor-pointer text-gray-700">
+      {{ label }}
+    </label>
+  {% endif %}
+</div>

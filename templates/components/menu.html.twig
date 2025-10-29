@@ -1,0 +1,62 @@
+{#
+  Menu Component - Navigation for sidebar
+
+  Usage:
+  {% include 'components/menu.html.twig' with {
+    toggle: false,
+    currentPath: request.getUri()
+  } %}
+#}
+
+{% set menuItems = [
+  {
+    title: "Management",
+    items: [
+      {
+        title: "Dashboard",
+        icon: "home",
+        href: "/dashboard"
+      },
+      {
+        title: "Tickets",
+        icon: "ticket",
+        href: "/ticket"
+      }
+    ]
+  }
+] %}
+
+<div class="flex flex-col {% if toggle %}gap-6{% else %}gap-4{% endif %} mb-auto">
+  {% for section in menuItems %}
+    <div>
+      {% if not toggle %}
+        <div class="flex items-center h-7 mb-1 px-3 text-gray-300">
+          {{ section.title }}
+        </div>
+      {% endif %}
+
+      <div class="flex flex-col">
+        {% for item in section.items %}
+          {% set isActive = (currentPath == item.href) %}
+
+          <a href="{{ item.href }}"
+             class="group relative flex items-center h-10 rounded-lg text-body-lg font-medium text-gray-500 transition-colors hover:text-gray-900 {% if toggle %}justify-center w-10 before:hidden{% else %}px-3{% endif %} {% if isActive %}bg-gray-25 text-gray-900 before:opacity-100{% else %}before:opacity-0{% endif %} before:absolute before:top-2 before:-left-4 before:bottom-2 before:w-1 before:bg-primary-600 before:rounded-r-sm before:transition-opacity">
+
+            <!-- Icon -->
+            <svg class="{% if toggle %}size-6{% else %}size-5{% endif %} {% if isActive %}fill-primary-500{% else %}fill-gray-500{% endif %} transition-colors group-hover:fill-gray-900" viewBox="0 0 20 20">
+              {% if item.icon == 'home' %}
+                <path d="M7.497 18.5H5.83c-1.919 0-3.5-1.484-3.5-3.347V9.083c0-.901.379-1.761 1.048-2.389l4.756-4.465c1.036-.972 2.69-.972 3.726 0l4.756 4.465c.668.627 1.048 1.488 1.048 2.389v6.069c0 1.863-1.581 3.347-3.5 3.347h-1.667-5zm2.994-14.813c-.266-.25-.722-.25-.988 0L4.747 8.153c-.269.253-.417.587-.417.931v6.069c0 .729.658 1.347 1.5 1.347h.666l.001-3.167c0-1.416 1.104-2.574 2.498-2.661l.169-.005h1.667c1.473 0 2.667 1.194 2.667 2.667l-.001 3.167h.667c.792 0 1.422-.547 1.493-1.22l.007-.127V9.083c0-.344-.147-.678-.417-.931l-4.756-4.465zm.339 8.979H9.163c-.368 0-.667.298-.667.667L8.496 16.5h3l.001-3.167c0-.335-.247-.612-.568-.659l-.099-.007z"/>
+              {% elseif item.icon == 'ticket' %}
+                <path d="M8.327 4a1 1 0 0 1 1 1c0 .368.298.667.667.667s.667-.298.667-.667a1 1 0 0 1 1-1h4.167a3.5 3.5 0 0 1 3.5 3.5v.833a1 1 0 0 1-1 1c-.368 0-.667.298-.667.667s.298.667.667.667a1 1 0 0 1 1 1v.833a3.5 3.5 0 0 1-3.5 3.5H11.66a1 1 0 0 1-1-1c0-.368-.298-.667-.667-.667s-.667.298-.667.667a1 1 0 0 1-1 1H4.16a3.5 3.5 0 0 1-3.5-3.5v-.833a1 1 0 0 1 1-1c.368 0 .667-.298.667-.667s-.298-.667-.667-.667a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 4.16 4h4.167zm4.092 2.111c-.288.628-.813 1.125-1.461 1.376V8.75a1 1 0 0 1-.883.993l-.117.007a1 1 0 0 1-1-1l-.001-1.294-.074-.031c-.58-.266-1.048-.734-1.314-1.314L7.521 6H4.16a1.5 1.5 0 0 0-1.493 1.356L2.66 7.5v.028l.111.047a2.67 2.67 0 0 1 1.55 2.256l.005.169c0 1.076-.638 2.004-1.556 2.425l-.111.046v.029a1.5 1.5 0 0 0 1.356 1.493L4.16 14h3.361l.047-.111c.266-.58.734-1.048 1.314-1.314l.111-.048V11.25a1 1 0 0 1 .883-.993l.117-.007a1 1 0 0 1 1 1v1.277l.111.048c.58.266 1.048.734 1.314 1.314l.047.111h3.362a1.5 1.5 0 0 0 1.493-1.356l.007-.144-.001-.028-.11-.047a2.67 2.67 0 0 1-1.55-2.256L15.66 10c0-1.076.638-2.004 1.556-2.425l.11-.048.001-.027a1.5 1.5 0 0 0-1.356-1.493L15.827 6h-3.362l-.047.111z"/>
+              {% endif %}
+            </svg>
+
+            {% if not toggle %}
+              <span class="ml-2">{{ item.title }}</span>
+            {% endif %}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>

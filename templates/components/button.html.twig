@@ -1,0 +1,59 @@
+{#
+  Button Component
+  Versatile button component that can render as button, anchor, or link
+
+  Usage:
+  {% include 'components/button.html.twig' with {
+    text: 'Click me',
+    type: 'button',
+    variant: 'primary',
+    size: 'md',
+    href: '#',
+    className: ''
+  } %}
+#}
+
+{% set variant = variant|default('primary') %}
+{% set size = size|default('md') %}
+{% set type = type|default('button') %}
+{% set as = as|default('button') %}
+
+{%- set baseClasses = 'inline-flex items-center justify-center gap-2 font-semibold transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50' -%}
+
+{%- set variantClasses = {
+  'primary': 'bg-primary-500 border-transparent text-white hover:bg-primary-600',
+  'secondary': 'border border-gray-100 shadow-xs text-gray-900 hover:bg-gray-25',
+  'white': 'bg-white border-transparent text-primary-500 hover:bg-gray-25',
+  'destructive': 'bg-error-100 border-transparent text-white hover:bg-error-200',
+  'ghost': 'bg-transparent border-transparent text-gray-700 hover:bg-gray-100',
+  'link': 'bg-transparent border-transparent text-primary-500 underline hover:text-primary-600'
+} -%}
+
+{%- set sizeClasses = {
+  'lg': 'h-12 px-6 rounded-lg text-body-md',
+  'md': 'h-10 px-4 rounded-lg text-body-md',
+  'sm': 'h-8 px-3 rounded-md text-body-sm',
+  'xs': 'h-6 px-2.5 rounded-md text-body-sm',
+  'icon': 'h-10 w-10 p-0',
+  'icon-sm': 'h-8 w-8 p-0',
+  'icon-lg': 'h-12 w-12 p-0'
+} -%}
+
+{%- set allClasses = baseClasses ~ ' ' ~ (variantClasses[variant]|default(variantClasses['primary'])) ~ ' ' ~ (sizeClasses[size]|default(sizeClasses['md'])) ~ ' ' ~ (className|default('')) -%}
+
+{% if as == 'link' %}
+  <a href="{{ href|default('#') }}" class="{{ allClasses }}">
+    {%- if icon %}<span class="icon">{{ icon }}</span>{% endif -%}
+    {{ text|default(slot) }}
+  </a>
+{% elif as == 'a' %}
+  <a href="{{ href|default('#') }}" class="{{ allClasses }}" {% if title %}title="{{ title }}"{% endif %}>
+    {%- if icon %}<span class="icon">{{ icon }}</span>{% endif -%}
+    {{ text|default(slot) }}
+  </a>
+{% else %}
+  <button type="{{ type }}" class="{{ allClasses }}" {% if disabled %}disabled{% endif %} {% if name %}name="{{ name }}"{% endif %}>
+    {%- if icon %}<span class="icon">{{ icon }}</span>{% endif -%}
+    {{ text|default(slot) }}
+  </button>
+{% endif %}
