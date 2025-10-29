@@ -17,6 +17,14 @@
   {% if toggle %}w-18{% else %}w-69{% endif %}
   {% if visible %}max-xl:translate-x-0{% else %}max-xl:-translate-x-full{% endif %}">
 
+  <!-- Mobile overlay (click to close sidebar on small screens) -->
+  <div data-sidebar-overlay
+       onclick="hideSidebarMobile()"
+       style="display:none;"
+       aria-hidden="true"
+       class="fixed inset-0 bg-black opacity-40 z-30">
+  </div>
+
   <!-- Logo Section -->
   <div class="flex items-center gap-2 border-b border-gray-100 {% if toggle %}flex-col px-5 py-3{% else %}justify-between p-5 max-md:py-4{% endif %}">
     <a href="/" class="flex items-center">
@@ -349,5 +357,28 @@
     if (confirm('Are you sure you want to logout?')) {
       window.location.href = '/api/auth/logout';
     }
+  }
+</script>
+
+<script>
+  // Mobile show/hide helpers for the sidebar (used by hamburger in header)
+  function showSidebarMobile() {
+    const sidebar = document.querySelector('[data-sidebar]');
+    const overlay = document.querySelector('[data-sidebar-overlay]');
+    if (!sidebar) return;
+
+    sidebar.classList.remove('max-xl:-translate-x-full');
+    sidebar.classList.add('max-xl:translate-x-0');
+    if (overlay) overlay.style.display = 'block';
+  }
+
+  function hideSidebarMobile() {
+    const sidebar = document.querySelector('[data-sidebar]');
+    const overlay = document.querySelector('[data-sidebar-overlay]');
+    if (!sidebar) return;
+
+    sidebar.classList.remove('max-xl:translate-x-0');
+    sidebar.classList.add('max-xl:-translate-x-full');
+    if (overlay) overlay.style.display = 'none';
   }
 </script>
