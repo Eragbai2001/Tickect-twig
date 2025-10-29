@@ -221,27 +221,31 @@
             </div>
 
             <!-- Table Content -->
-         <div class="px-5 py-2 max-lg:overflow-x-auto max-lg:scrollbar-none max-md:px-4">
-                <table class="responsive-table w-full text-body-md font-medium max-lg:min-w-268">
+         <!-- Table Content -->
+            <div class="px-5 py-2 max-lg:overflow-x-auto max-lg:scrollbar-none max-md:px-4">
+                <table class="responsive-table w-full text-body-md font-medium max-lg:min-w-268 table-fixed">
+                    <colgroup>
+                        <col style="width: 60px;">
+                        <col style="width: auto;">
+                        <col style="width: 100px;">
+                        <col style="width: 100px;">
+                        <col style="width: 80px;">
+                        <col style="width: 130px;">
+                        <col style="width: 110px;">
+                        <col style="width: 60px;">
+                    </colgroup>
                     <thead class="max-md:hidden">
                         <tr class="relative">
-                            <th class="w-13 pl-2.5 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border border-gray-100 rounded-l-[0.625rem] max-2xl:w-10">No</th>
+                            <th class="pl-2.5 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border border-gray-100 rounded-l-[0.625rem]">No</th>
                             <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Ticket Name</th>
                             <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Price</th>
                             <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Quantity</th>
                             <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Sold</th>
                             <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Sales Status</th>
                             <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border-t border-b border-gray-100">Visibility</th>
-                            <th class="w-11 pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border border-gray-100 rounded-r-[0.625rem]"></th>
+                            <th class="pl-3 pr-3 py-2.25 font-medium text-left text-gray-500 bg-gray-25 border border-gray-100 rounded-r-[0.625rem]"></th>
                         </tr>
                     </thead>
-                    <tbody id="ticketsTableBody">
-                        <tr>
-                            <td colspan="8" class="text-center py-12 text-gray-500">
-                                Loading tickets...
-                            </td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
 
